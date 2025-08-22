@@ -28,7 +28,7 @@ public class Duke {
                     printLineSeparator();
                     printArrayOfItems(listOfItems);
                     printLineSeparator();
-                } else if (input.startsWith("mark ")) {
+                } else if (input.toLowerCase().startsWith("mark ")) {
                     validateTaskNumber(input, index);
                     String[] split = input.split(" ");
                     int taskNum = Integer.parseInt(split[1]);
@@ -37,7 +37,7 @@ public class Duke {
                         " Nice! I've marked this task as done:",
                         "   " + listOfItems[taskNum - 1]
                     );
-                } else if (input.startsWith("unmark ")) {
+                } else if (input.toLowerCase().startsWith("unmark ")) {
                     validateTaskNumber(input, index);
                     String[] parts = input.split(" ");
                     int taskNum = Integer.parseInt(parts[1]);
@@ -46,24 +46,24 @@ public class Duke {
                         " OK, I've marked this task as not done yet:",
                         "   " + listOfItems[taskNum - 1]
                     );
-                } else if (input.startsWith("todo")) {
+                } else if (input.toLowerCase().startsWith("todo")) {
                     validateTodoInput(input);
-                    String description = input.substring(5);
+                    String description = input.substring(4).trim();
                     listOfItems[index] = new Todo(description);
                     index += 1;
                     printTaskAddedMessage(listOfItems[index - 1], index);
-                } else if (input.startsWith("deadline")) {
+                } else if (input.toLowerCase().startsWith("deadline")) {
                     validateDeadlineInput(input);
                     String[] parts = input.split(" /by ");
-                    String description = parts[0].substring(9);
+                    String description = parts[0].substring(8).trim();
                     String by = parts[1];
                     listOfItems[index] = new Deadline(description, by);
                     index += 1;
                     printTaskAddedMessage(listOfItems[index - 1], index);
-                } else if (input.startsWith("event")) {
+                } else if (input.toLowerCase().startsWith("event")) {
                     validateEventInput(input);
                     String[] fromSplit = input.split(" /from ");
-                    String description = fromSplit[0].substring(6);
+                    String description = fromSplit[0].substring(5).trim();
                     String[] toSplit = fromSplit[1].split(" /to ");
                     String from = toSplit[0];
                     String to = toSplit[1];
@@ -122,17 +122,19 @@ public class Duke {
     }
     
     private static void validateTodoInput(String input) throws TodoException {
-        if (input.equals("todo") || input.trim().equals("todo")) {
+        String trimmed = input.trim().toLowerCase();
+        if (trimmed.equals("todo") || trimmed.matches("todo\\s*")) {
             throw new TodoException("OOPS!!! The description of a todo cannot be empty.");
         }
     }
     
     private static void validateDeadlineInput(String input) throws DeadlineException {
-        if (input.equals("deadline") || input.trim().equals("deadline")) {
+        String trimmed = input.trim().toLowerCase();
+        if (trimmed.equals("deadline") || trimmed.matches("deadline\\s*")) {
             throw new DeadlineException("OOPS!!! The description of a deadline cannot be empty.");
         }
 
-        if (!input.contains(" /by ")) {
+        if (!input.toLowerCase().contains(" /by ")) {
             throw new DeadlineException("OOPS!!! Deadline format should be: deadline <description> /by <time>");
         }
 
@@ -143,11 +145,12 @@ public class Duke {
     }
     
     private static void validateEventInput(String input) throws EventException {
-        if (input.equals("event") || input.trim().equals("event")) {
+        String trimmed = input.trim().toLowerCase();
+        if (trimmed.equals("event") || trimmed.matches("event\\s*")) {
             throw new EventException("OOPS!!! The description of an event cannot be empty.");
         }
 
-        if (!input.contains(" /from ") || !input.contains(" /to ")) {
+        if (!input.toLowerCase().contains(" /from ") || !input.toLowerCase().contains(" /to ")) {
             throw new EventException("OOPS!!! Event format should be: event <description> /from <start> /to <end>");
         }
 

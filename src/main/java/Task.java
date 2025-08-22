@@ -21,6 +21,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return getStatusIcon() + " " + getStatusIcon();
+        return "[" + getStatusIcon() + "] " + description;
     }
 }

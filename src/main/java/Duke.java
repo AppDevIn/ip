@@ -70,6 +70,16 @@ public class Duke {
                     Task newTask = new Event(description, from, to);
                     listOfItems.add(newTask);
                     printTaskAddedMessage(newTask, listOfItems.size());
+                } else if (input.toLowerCase().startsWith("delete ")) {
+                    validateTaskNumber(input, listOfItems.size());
+                    String[] parts = input.split(" ");
+                    int taskNum = Integer.parseInt(parts[1]);
+                    Task removedTask = listOfItems.remove(taskNum - 1);
+                    printMessages(
+                        " Noted. I've removed this task:",
+                        "   " + removedTask,
+                        " Now you have " + listOfItems.size() + " tasks in the list."
+                    );
                 } else if (input.equalsIgnoreCase("bye")) {
                     break;
                 } else {
@@ -88,9 +98,7 @@ public class Duke {
     private static void printArrayOfItems(ArrayList<Task> items) {
         System.out.println(" Here are the tasks in your list:");
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i) != null) {
-                System.out.println(" " + (i + 1) + "." + items.get(i));
-            }
+            System.out.println(" " + (i + 1) + "." + items.get(i));
         }
     }
     

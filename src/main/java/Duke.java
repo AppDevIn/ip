@@ -22,60 +22,61 @@ public class Duke {
 
 
         while (true) {
-            String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("list")) {
-                printLineSeparator();
-                printArrayOfItems(listOfItems);
-                printLineSeparator();
-            } else if (input.matches("mark \\d+")) {
-                String[] split = input.split(" ");
-                int taskNum = Integer.parseInt(split[1]);
-                if (taskNum >= 1 && taskNum <= index) {
+            try {
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("list")) {
+                    printLineSeparator();
+                    printArrayOfItems(listOfItems);
+                    printLineSeparator();
+                } else if (input.startsWith("mark ")) {
+                    validateTaskNumber(input, index);
+                    String[] split = input.split(" ");
+                    int taskNum = Integer.parseInt(split[1]);
                     listOfItems[taskNum - 1].markAsDone();
                     printMessages(
                         " Nice! I've marked this task as done:",
                         "   " + listOfItems[taskNum - 1]
                     );
-                } else {
-                    printInvalidTaskNumberError();
-                }
-            } else if (input.matches("unmark \\d+")) {
-                String[] parts = input.split(" ");
-                int taskNum = Integer.parseInt(parts[1]);
-                if (taskNum >= 1 && taskNum <= index) {
+                } else if (input.startsWith("unmark ")) {
+                    validateTaskNumber(input, index);
+                    String[] parts = input.split(" ");
+                    int taskNum = Integer.parseInt(parts[1]);
                     listOfItems[taskNum - 1].markAsUndone();
                     printMessages(
                         " OK, I've marked this task as not done yet:",
                         "   " + listOfItems[taskNum - 1]
                     );
+                } else if (input.startsWith("todo")) {
+                    validateTodoInput(input);
+                    String description = input.substring(5);
+                    listOfItems[index] = new Todo(description);
+                    index += 1;
+                    printTaskAddedMessage(listOfItems[index - 1], index);
+                } else if (input.startsWith("deadline")) {
+                    validateDeadlineInput(input);
+                    String[] parts = input.split(" /by ");
+                    String description = parts[0].substring(9);
+                    String by = parts[1];
+                    listOfItems[index] = new Deadline(description, by);
+                    index += 1;
+                    printTaskAddedMessage(listOfItems[index - 1], index);
+                } else if (input.startsWith("event")) {
+                    validateEventInput(input);
+                    String[] fromSplit = input.split(" /from ");
+                    String description = fromSplit[0].substring(6);
+                    String[] toSplit = fromSplit[1].split(" /to ");
+                    String from = toSplit[0];
+                    String to = toSplit[1];
+                    listOfItems[index] = new Event(description, from, to);
+                    index += 1;
+                    printTaskAddedMessage(listOfItems[index - 1], index);
+                } else if (input.equalsIgnoreCase("bye")) {
+                    break;
                 } else {
-                    printInvalidTaskNumberError();
+                    throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-( Try: todo, deadline, event, list, mark, unmark, bye");
                 }
-            } else if (input.matches("todo .+")) {
-                String description = input.substring(5);
-                listOfItems[index] = new Todo(description);
-                index += 1;
-                printTaskAddedMessage(listOfItems[index - 1], index);
-            } else if (input.matches("deadline .+ /by .+")) {
-                String[] parts = input.split(" /by ");
-                String description = parts[0].substring(9);
-                String by = parts[1];
-                listOfItems[index] = new Deadline(description, by);
-                index += 1;
-                printTaskAddedMessage(listOfItems[index - 1], index);
-            } else if (input.matches("event .+ /from .+ /to .+")) {
-                String[] fromSplit = input.split(" /from ");
-                String description = fromSplit[0].substring(6);
-                String[] toSplit = fromSplit[1].split(" /to ");
-                String from = toSplit[0];
-                String to = toSplit[1];
-                listOfItems[index] = new Event(description, from, to);
-                index += 1;
-                printTaskAddedMessage(listOfItems[index - 1], index);
-            } else if (input.equalsIgnoreCase("bye")) {
-                break;
-            } else {
-                printMessage(" I don't understand that command!");
+            } catch (DukeException e) {
+                printMessage(" " + e.getMessage());
             }
         }
 
@@ -111,9 +112,6 @@ public class Duke {
         printLineSeparator();
     }
     
-    private static void printInvalidTaskNumberError() {
-        printMessage(" Invalid task number!");
-    }
     
     private static void printTaskAddedMessage(Task task, int taskCount) {
         printMessages(
@@ -121,5 +119,62 @@ public class Duke {
             "   " + task,
             " Now you have " + taskCount + " tasks in the list."
         );
+    }
+    
+    private static void validateTodoInput(String input) throws TodoException {
+        if (input.equals("todo") || input.trim().equals("todo")) {
+            throw new TodoException("OOPS!!! The description of a todo cannot be empty.");
+        }
+    }
+    
+    private static void validateDeadlineInput(String input) throws DeadlineException {
+        if (input.equals("deadline") || input.trim().equals("deadline")) {
+            throw new DeadlineException("OOPS!!! The description of a deadline cannot be empty.");
+        }
+
+        if (!input.contains(" /by ")) {
+            throw new DeadlineException("OOPS!!! Deadline format should be: deadline <description> /by <time>");
+        }
+
+        String[] parts = input.split(" /by ");
+        if (parts.length != 2 || parts[1].trim().isEmpty()) {
+            throw new DeadlineException("OOPS!!! The deadline time cannot be empty.");
+        }
+    }
+    
+    private static void validateEventInput(String input) throws EventException {
+        if (input.equals("event") || input.trim().equals("event")) {
+            throw new EventException("OOPS!!! The description of an event cannot be empty.");
+        }
+
+        if (!input.contains(" /from ") || !input.contains(" /to ")) {
+            throw new EventException("OOPS!!! Event format should be: event <description> /from <start> /to <end>");
+        }
+
+        String[] fromSplit = input.split(" /from ");
+        if (fromSplit.length != 2) {
+            throw new EventException("OOPS!!! Event format should be: event <description> /from <start> /to <end>");
+        }
+
+        String[] toSplit = fromSplit[1].split(" /to ");
+        if (toSplit.length != 2 || toSplit[0].trim().isEmpty() || toSplit[1].trim().isEmpty()) {
+            throw new EventException("OOPS!!! Event times cannot be empty.");
+        }
+    }
+    
+    private static void validateTaskNumber(String input, int maxTasks) throws InvalidTaskNumberException {
+        String[] parts = input.split(" ");
+        if (parts.length != 2) {
+            throw new InvalidTaskNumberException("OOPS!!! Please provide a task number.");
+        }
+
+        try {
+            int taskNum = Integer.parseInt(parts[1]);
+            if (taskNum < 1 || taskNum > maxTasks) {
+                throw new InvalidTaskNumberException("OOPS!!! Task number " + taskNum + " is out of range. You have " + maxTasks + " tasks.");
+            }
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskNumberException("OOPS!!! Task number must be a valid number.");
+        }
     }
 }

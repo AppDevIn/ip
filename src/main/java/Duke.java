@@ -9,6 +9,8 @@ public class Duke {
                 + "|____ |____/|___| |_| |_| |_|\n";
         System.out.println("Hello from\n" + logo);
 
+        String[] listOfItems = new String[100];
+
 
         System.out.println("____________________________________________________________");
         System.out.println(" Hello! I'm E.D.I.T.H.");
@@ -16,13 +18,24 @@ public class Duke {
         System.out.println("____________________________________________________________");
         
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        
-        while (!input.equalsIgnoreCase("bye")) {
+        int index = 0;
+
+
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("list")) {
+                System.out.println("____________________________________________________________");
+                printArrayOfItems(listOfItems);
+                System.out.println("____________________________________________________________");
+                continue;
+            } else if (input.equalsIgnoreCase("bye")) {
+                break;
+            }
+            listOfItems[index] = input;
+            index += 1;
             System.out.println("____________________________________________________________");
-            System.out.println(" " + input);
+            System.out.println(" added: " + input);
             System.out.println("____________________________________________________________");
-            input = scanner.nextLine();
         }
 
         System.out.println("____________________________________________________________");
@@ -30,5 +43,13 @@ public class Duke {
         System.out.println("____________________________________________________________");
 
         scanner.close();
+    }
+
+    private static void printArrayOfItems(String[] items) {
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] != null) {
+                System.out.println(" " + (i + 1) + ". " + items[i]);
+            }
+        }
     }
 }

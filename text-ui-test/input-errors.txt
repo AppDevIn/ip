@@ -1,0 +1,42 @@
+todo
+todo   
+  todo
+TODO
+deadline
+deadline   
+DEADLINE
+deadline homework
+deadline homework /BY Sunday
+deadline homework/by Sunday
+deadline /by Sunday
+deadline homework /by
+deadline homework /by   
+event
+event   
+EVENT
+event meeting
+event meeting /FROM Mon /TO 4pm
+event meeting/from Mon /to 4pm
+event /from Mon /to 4pm
+event meeting /from   /to 4pm
+event meeting /from Mon /to   
+todo read book
+mark
+mark abc
+mark -1
+mark 0
+mark 999
+mark 1 2
+MARK 1
+mark 2
+unmark
+unmark xyz
+unmark -5
+UNMARK 1
+unmark 0
+xyz123
+!!!invalid
+
+blah
+invalidcommand
+bye

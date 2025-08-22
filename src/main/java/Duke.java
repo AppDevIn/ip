@@ -73,7 +73,7 @@ public class Duke {
                 } else if (input.equalsIgnoreCase("bye")) {
                     break;
                 } else {
-                    throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-( Try: todo, deadline, event, list, mark, unmark, bye");
+                    throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
             } catch (DukeException e) {
                 printMessage(" " + e.getMessage());

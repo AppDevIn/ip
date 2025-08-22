@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
@@ -9,7 +10,7 @@ public class Duke {
                 + "|____ |____/|___| |_| |_| |_|\n";
         System.out.println("Hello from\n" + logo);
 
-        Task[] listOfItems = new Task[100];
+        ArrayList<Task> listOfItems = new ArrayList<>();
 
 
         printMessages(
@@ -18,7 +19,6 @@ public class Duke {
         );
         
         Scanner scanner = new Scanner(System.in);
-        int index = 0;
 
 
         while (true) {
@@ -29,37 +29,37 @@ public class Duke {
                     printArrayOfItems(listOfItems);
                     printLineSeparator();
                 } else if (input.toLowerCase().startsWith("mark ")) {
-                    validateTaskNumber(input, index);
+                    validateTaskNumber(input, listOfItems.size());
                     String[] split = input.split(" ");
                     int taskNum = Integer.parseInt(split[1]);
-                    listOfItems[taskNum - 1].markAsDone();
+                    listOfItems.get(taskNum - 1).markAsDone();
                     printMessages(
                         " Nice! I've marked this task as done:",
-                        "   " + listOfItems[taskNum - 1]
+                        "   " + listOfItems.get(taskNum - 1)
                     );
                 } else if (input.toLowerCase().startsWith("unmark ")) {
-                    validateTaskNumber(input, index);
+                    validateTaskNumber(input, listOfItems.size());
                     String[] parts = input.split(" ");
                     int taskNum = Integer.parseInt(parts[1]);
-                    listOfItems[taskNum - 1].markAsUndone();
+                    listOfItems.get(taskNum - 1).markAsUndone();
                     printMessages(
                         " OK, I've marked this task as not done yet:",
-                        "   " + listOfItems[taskNum - 1]
+                        "   " + listOfItems.get(taskNum - 1)
                     );
                 } else if (input.toLowerCase().startsWith("todo")) {
                     validateTodoInput(input);
                     String description = input.substring(4).trim();
-                    listOfItems[index] = new Todo(description);
-                    index += 1;
-                    printTaskAddedMessage(listOfItems[index - 1], index);
+                    Task newTask = new Todo(description);
+                    listOfItems.add(newTask);
+                    printTaskAddedMessage(newTask, listOfItems.size());
                 } else if (input.toLowerCase().startsWith("deadline")) {
                     validateDeadlineInput(input);
                     String[] parts = input.split(" /by ");
                     String description = parts[0].substring(8).trim();
                     String by = parts[1];
-                    listOfItems[index] = new Deadline(description, by);
-                    index += 1;
-                    printTaskAddedMessage(listOfItems[index - 1], index);
+                    Task newTask = new Deadline(description, by);
+                    listOfItems.add(newTask);
+                    printTaskAddedMessage(newTask, listOfItems.size());
                 } else if (input.toLowerCase().startsWith("event")) {
                     validateEventInput(input);
                     String[] fromSplit = input.split(" /from ");
@@ -67,9 +67,9 @@ public class Duke {
                     String[] toSplit = fromSplit[1].split(" /to ");
                     String from = toSplit[0];
                     String to = toSplit[1];
-                    listOfItems[index] = new Event(description, from, to);
-                    index += 1;
-                    printTaskAddedMessage(listOfItems[index - 1], index);
+                    Task newTask = new Event(description, from, to);
+                    listOfItems.add(newTask);
+                    printTaskAddedMessage(newTask, listOfItems.size());
                 } else if (input.equalsIgnoreCase("bye")) {
                     break;
                 } else {
@@ -85,11 +85,11 @@ public class Duke {
         scanner.close();
     }
 
-    private static void printArrayOfItems(Task[] items) {
+    private static void printArrayOfItems(ArrayList<Task> items) {
         System.out.println(" Here are the tasks in your list:");
-        for (int i = 0; i < items.length; i++) {
-            if (items[i] != null) {
-                System.out.println(" " + (i + 1) + "." + items[i]);
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i) != null) {
+                System.out.println(" " + (i + 1) + "." + items.get(i));
             }
         }
     }

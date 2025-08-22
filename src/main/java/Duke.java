@@ -12,10 +12,10 @@ public class Duke {
         Task[] listOfItems = new Task[100];
 
 
-        System.out.println("____________________________________________________________");
-        System.out.println(" Hello! I'm E.D.I.T.H.");
-        System.out.println(" What can I do for you?");
-        System.out.println("____________________________________________________________");
+        printMessages(
+            " Hello! I'm E.D.I.T.H.",
+            " What can I do for you?"
+        );
         
         Scanner scanner = new Scanner(System.in);
         int index = 0;
@@ -24,50 +24,62 @@ public class Duke {
         while (true) {
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("list")) {
-                System.out.println("____________________________________________________________");
+                printLineSeparator();
                 printArrayOfItems(listOfItems);
-                System.out.println("____________________________________________________________");
-                continue;
+                printLineSeparator();
             } else if (input.matches("mark \\d+")) {
                 String[] split = input.split(" ");
                 int taskNum = Integer.parseInt(split[1]);
                 if (taskNum >= 1 && taskNum <= index) {
                     listOfItems[taskNum - 1].markAsDone();
-                    System.out.println("____________________________________________________________");
-                    System.out.println(" Nice! I've marked this task as done:");
-                    System.out.println("   " + listOfItems[taskNum - 1]);
-                    System.out.println("____________________________________________________________");
+                    printMessages(
+                        " Nice! I've marked this task as done:",
+                        "   " + listOfItems[taskNum - 1]
+                    );
                 } else {
                     printInvalidTaskNumberError();
                 }
-                continue;
             } else if (input.matches("unmark \\d+")) {
                 String[] parts = input.split(" ");
                 int taskNum = Integer.parseInt(parts[1]);
                 if (taskNum >= 1 && taskNum <= index) {
                     listOfItems[taskNum - 1].markAsUndone();
-                    System.out.println("____________________________________________________________");
-                    System.out.println(" OK, I've marked this task as not done yet:");
-                    System.out.println("   " + listOfItems[taskNum - 1]);
-                    System.out.println("____________________________________________________________");
+                    printMessages(
+                        " OK, I've marked this task as not done yet:",
+                        "   " + listOfItems[taskNum - 1]
+                    );
                 } else {
                     printInvalidTaskNumberError();
                 }
-                continue;
-            }
-            else if (input.equalsIgnoreCase("bye")) {
+            } else if (input.matches("todo .+")) {
+                String description = input.substring(5);
+                listOfItems[index] = new Todo(description);
+                index += 1;
+                printTaskAddedMessage(listOfItems[index - 1], index);
+            } else if (input.matches("deadline .+ /by .+")) {
+                String[] parts = input.split(" /by ");
+                String description = parts[0].substring(9);
+                String by = parts[1];
+                listOfItems[index] = new Deadline(description, by);
+                index += 1;
+                printTaskAddedMessage(listOfItems[index - 1], index);
+            } else if (input.matches("event .+ /from .+ /to .+")) {
+                String[] fromSplit = input.split(" /from ");
+                String description = fromSplit[0].substring(6);
+                String[] toSplit = fromSplit[1].split(" /to ");
+                String from = toSplit[0];
+                String to = toSplit[1];
+                listOfItems[index] = new Event(description, from, to);
+                index += 1;
+                printTaskAddedMessage(listOfItems[index - 1], index);
+            } else if (input.equalsIgnoreCase("bye")) {
                 break;
+            } else {
+                printMessage(" I don't understand that command!");
             }
-            listOfItems[index] = new Task(input);
-            index += 1;
-            System.out.println("____________________________________________________________");
-            System.out.println(" added: " + input);
-            System.out.println("____________________________________________________________");
         }
 
-        System.out.println("____________________________________________________________");
-        System.out.println(" Bye. Hope to see you again soon!");
-        System.out.println("____________________________________________________________");
+        printMessage(" Bye. Hope to see you again soon!");
 
         scanner.close();
     }
@@ -81,9 +93,33 @@ public class Duke {
         }
     }
     
+    private static void printLineSeparator() {
+        System.out.println("____________________________________________________________");
+    }
+    
+    private static void printMessage(String message) {
+        printLineSeparator();
+        System.out.println(message);
+        printLineSeparator();
+    }
+    
+    private static void printMessages(String... messages) {
+        printLineSeparator();
+        for (String message : messages) {
+            System.out.println(message);
+        }
+        printLineSeparator();
+    }
+    
     private static void printInvalidTaskNumberError() {
-        System.out.println("____________________________________________________________");
-        System.out.println(" Invalid task number!");
-        System.out.println("____________________________________________________________");
+        printMessage(" Invalid task number!");
+    }
+    
+    private static void printTaskAddedMessage(Task task, int taskCount) {
+        printMessages(
+            " Got it. I've added this task:",
+            "   " + task,
+            " Now you have " + taskCount + " tasks in the list."
+        );
     }
 }

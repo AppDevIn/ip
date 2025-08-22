@@ -21,69 +21,90 @@ public class Duke {
         Scanner scanner = new Scanner(System.in);
 
 
-        while (true) {
+        boolean isEndOfPrg = false;
+        while (!isEndOfPrg) {
             try {
                 String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("list")) {
-                    printLineSeparator();
-                    printArrayOfItems(listOfItems);
-                    printLineSeparator();
-                } else if (input.toLowerCase().startsWith("mark ")) {
-                    validateTaskNumber(input, listOfItems.size());
-                    String[] split = input.split(" ");
-                    int taskNum = Integer.parseInt(split[1]);
-                    listOfItems.get(taskNum - 1).markAsDone();
-                    printMessages(
-                        " Nice! I've marked this task as done:",
-                        "   " + listOfItems.get(taskNum - 1)
-                    );
-                } else if (input.toLowerCase().startsWith("unmark ")) {
-                    validateTaskNumber(input, listOfItems.size());
-                    String[] parts = input.split(" ");
-                    int taskNum = Integer.parseInt(parts[1]);
-                    listOfItems.get(taskNum - 1).markAsUndone();
-                    printMessages(
-                        " OK, I've marked this task as not done yet:",
-                        "   " + listOfItems.get(taskNum - 1)
-                    );
-                } else if (input.toLowerCase().startsWith("todo")) {
-                    validateTodoInput(input);
-                    String description = input.substring(4).trim();
-                    Task newTask = new Todo(description);
-                    listOfItems.add(newTask);
-                    printTaskAddedMessage(newTask, listOfItems.size());
-                } else if (input.toLowerCase().startsWith("deadline")) {
-                    validateDeadlineInput(input);
-                    String[] parts = input.split(" /by ");
-                    String description = parts[0].substring(8).trim();
-                    String by = parts[1];
-                    Task newTask = new Deadline(description, by);
-                    listOfItems.add(newTask);
-                    printTaskAddedMessage(newTask, listOfItems.size());
-                } else if (input.toLowerCase().startsWith("event")) {
-                    validateEventInput(input);
-                    String[] fromSplit = input.split(" /from ");
-                    String description = fromSplit[0].substring(5).trim();
-                    String[] toSplit = fromSplit[1].split(" /to ");
-                    String from = toSplit[0];
-                    String to = toSplit[1];
-                    Task newTask = new Event(description, from, to);
-                    listOfItems.add(newTask);
-                    printTaskAddedMessage(newTask, listOfItems.size());
-                } else if (input.toLowerCase().startsWith("delete ")) {
-                    validateTaskNumber(input, listOfItems.size());
-                    String[] parts = input.split(" ");
-                    int taskNum = Integer.parseInt(parts[1]);
-                    Task removedTask = listOfItems.remove(taskNum - 1);
-                    printMessages(
-                        " Noted. I've removed this task:",
-                        "   " + removedTask,
-                        " Now you have " + listOfItems.size() + " tasks in the list."
-                    );
-                } else if (input.equalsIgnoreCase("bye")) {
-                    break;
-                } else {
-                    throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+                CommandType command = CommandType.fromString(input);
+                
+                switch (command) {
+                    case LIST:
+                        printLineSeparator();
+                        printArrayOfItems(listOfItems);
+                        printLineSeparator();
+                        break;
+                        
+                    case MARK:
+                        validateTaskNumber(input, listOfItems.size());
+                        String[] split = input.split(" ");
+                        int taskNum = Integer.parseInt(split[1]);
+                        listOfItems.get(taskNum - 1).markAsDone();
+                        printMessages(
+                            " Nice! I've marked this task as done:",
+                            "   " + listOfItems.get(taskNum - 1)
+                        );
+                        break;
+                        
+                    case UNMARK:
+                        validateTaskNumber(input, listOfItems.size());
+                        String[] parts = input.split(" ");
+                        int unmarkNum = Integer.parseInt(parts[1]);
+                        listOfItems.get(unmarkNum - 1).markAsUndone();
+                        printMessages(
+                            " OK, I've marked this task as not done yet:",
+                            "   " + listOfItems.get(unmarkNum - 1)
+                        );
+                        break;
+                        
+                    case TODO:
+                        validateTodoInput(input);
+                        String description = input.substring(4).trim();
+                        Task newTask = new Todo(description);
+                        listOfItems.add(newTask);
+                        printTaskAddedMessage(newTask, listOfItems.size());
+                        break;
+                        
+                    case DEADLINE:
+                        validateDeadlineInput(input);
+                        String[] deadlineParts = input.split(" /by ");
+                        String deadlineDesc = deadlineParts[0].substring(8).trim();
+                        String by = deadlineParts[1];
+                        Task deadlineTask = new Deadline(deadlineDesc, by);
+                        listOfItems.add(deadlineTask);
+                        printTaskAddedMessage(deadlineTask, listOfItems.size());
+                        break;
+                        
+                    case EVENT:
+                        validateEventInput(input);
+                        String[] fromSplit = input.split(" /from ");
+                        String eventDesc = fromSplit[0].substring(5).trim();
+                        String[] toSplit = fromSplit[1].split(" /to ");
+                        String from = toSplit[0];
+                        String to = toSplit[1];
+                        Task eventTask = new Event(eventDesc, from, to);
+                        listOfItems.add(eventTask);
+                        printTaskAddedMessage(eventTask, listOfItems.size());
+                        break;
+                        
+                    case DELETE:
+                        validateTaskNumber(input, listOfItems.size());
+                        String[] deleteParts = input.split(" ");
+                        int deleteNum = Integer.parseInt(deleteParts[1]);
+                        Task removedTask = listOfItems.remove(deleteNum - 1);
+                        printMessages(
+                            " Noted. I've removed this task:",
+                            "   " + removedTask,
+                            " Now you have " + listOfItems.size() + " tasks in the list."
+                        );
+                        break;
+                        
+                    case BYE:
+                        isEndOfPrg=true;
+                        break;
+                        
+                    case INVALID:
+                    default:
+                        throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
             } catch (DukeException e) {
                 printMessage(" " + e.getMessage());

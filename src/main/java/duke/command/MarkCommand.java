@@ -12,13 +12,26 @@ import duke.ui.Ui;
 import duke.exception.DukeException;
 
 
+/**
+ * Command for marking a task as completed.
+ * Takes a task number and flips that task's status to done.
+ */
 public class MarkCommand extends Command {
     private String input;
     
+    /**
+     * Creates a mark command from the user's input.
+     * 
+     * @param input the full command string like "mark 3"
+     */
     public MarkCommand(String input) {
         this.input = input;
     }
     
+    /**
+     * Marks the specified task as done and shows confirmation.
+     * Converts from 1-based user numbering to 0-based array indexing.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws DukeException {
         String[] split = input.split(" ");

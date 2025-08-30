@@ -33,6 +33,9 @@ public class Parser {
             case "delete":
                 validateTaskNumber(input, taskCount);
                 return new DeleteCommand(input);
+            case "find":
+                validateFindInput(input);
+                return new FindCommand(input);
             case "bye":
                 return new ExitCommand();
             default:
@@ -98,6 +101,19 @@ public class Parser {
             }
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException("OOPS!!! Task number must be a valid number.");
+        }
+    }
+    
+    /**
+     * Validates the format of a find command input.
+     * 
+     * @param input the find command string to validate
+     * @throws FindException if the search keyword is empty or contains only whitespace
+     */
+    private static void validateFindInput(String input) throws FindException {
+        String trimmed = input.trim().toLowerCase();
+        if (trimmed.equals("find") || trimmed.matches("find\\s*")) {
+            throw new FindException("OOPS!!! The search keyword cannot be empty.");
         }
     }
 }

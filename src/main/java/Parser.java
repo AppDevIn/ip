@@ -2,7 +2,7 @@ import java.time.format.DateTimeParseException;
 
 public class Parser {
     
-    public static CommandType parseCommand(String input, int taskCount) throws DukeException {
+    public static Command parse(String input, int taskCount) throws DukeException {
         if (input == null || input.trim().isEmpty()) {
             throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
@@ -12,26 +12,26 @@ public class Parser {
         switch (command) {
             case "todo":
                 validateTodoInput(input);
-                return CommandType.TODO;
+                return new TodoCommand(input);
             case "deadline":
                 validateDeadlineInput(input);
-                return CommandType.DEADLINE;
+                return new DeadlineCommand(input);
             case "event":
                 validateEventInput(input);
-                return CommandType.EVENT;
+                return new EventCommand(input);
             case "list":
-                return CommandType.LIST;
+                return new ListCommand();
             case "mark":
                 validateTaskNumber(input, taskCount);
-                return CommandType.MARK;
+                return new MarkCommand(input);
             case "unmark":
                 validateTaskNumber(input, taskCount);
-                return CommandType.UNMARK;
+                return new UnmarkCommand(input);
             case "delete":
                 validateTaskNumber(input, taskCount);
-                return CommandType.DELETE;
+                return new DeleteCommand(input);
             case "bye":
-                return CommandType.BYE;
+                return new ExitCommand();
             default:
                 throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }

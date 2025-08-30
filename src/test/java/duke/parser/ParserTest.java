@@ -1,7 +1,20 @@
 package duke.parser;
 
-import duke.command.*;
-import duke.exception.*;
+import duke.command.Command;
+import duke.command.DeadlineCommand;
+import duke.command.DeleteCommand;
+import duke.command.EventCommand;
+import duke.command.ExitCommand;
+import duke.command.ListCommand;
+import duke.command.MarkCommand;
+import duke.command.TodoCommand;
+import duke.command.UnmarkCommand;
+import duke.exception.DeadlineException;
+import duke.exception.DukeException;
+import duke.exception.EventException;
+import duke.exception.InvalidCommandException;
+import duke.exception.InvalidTaskNumberException;
+import duke.exception.TodoException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -1,0 +1,8 @@
+deadline return book /by 2019-12-02
+deadline submit homework /by 2/12/2019 1800
+event project meeting /from 2019-10-15 /to 2019-10-15
+event team lunch /from 15/10/2019 1200 /to 15/10/2019 1400
+list
+deadline bad date /by invalid-date
+event bad event /from bad-date /to 2019-10-15
+bye

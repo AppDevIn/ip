@@ -1,6 +1,8 @@
 plugins {
     id 'application'
     id 'java'
+    id 'checkstyle'
+    id 'com.github.spotbugs' version '5.0.14'
 }
 
 repositories {
@@ -30,3 +32,33 @@ test {
 application {
     mainClass = 'duke.Duke'
 }
+
+checkstyle {
+    toolVersion = '10.3.2'
+    configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
+spotbugs {
+    toolVersion = '4.7.3'
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+    reports {
+        html {
+            required = true
+        }
+        xml {
+            required = false
+        }
+    }
+}
+
+check.dependsOn checkstyleMain, checkstyleTest, spotbugsMain

@@ -51,7 +51,9 @@ public abstract class Task {
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
-                if (keyValue.length != 2) continue;
+                if (keyValue.length != 2) {
+                    continue;
+                }
                 
                 String key = keyValue[0].trim().replace("\"", "");
                 if ("type".equals(key)) {

@@ -19,8 +19,8 @@ public class Ui {
         System.out.println("Hello from\n" + logo);
         
         showMessages(
-            " Hello! I'm E.D.I.T.H.",
-            " What can I do for you?"
+                " Hello! I'm E.D.I.T.H.",
+                " What can I do for you?"
         );
     }
 
@@ -55,9 +55,9 @@ public class Ui {
 
     public void showTaskAdded(Task task, int taskCount) {
         showMessages(
-            " Got it. I've added this task:",
-            "   " + task,
-            " Now you have " + taskCount + " tasks in the list."
+                " Got it. I've added this task:",
+                "   " + task,
+                " Now you have " + taskCount + " tasks in the list."
         );
     }
 

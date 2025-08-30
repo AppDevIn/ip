@@ -28,7 +28,8 @@ public class Deadline extends Task {
 
     @Override
     public String toJson() {
-        return "{\"type\":\"D\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"by\":\"" + DateTimeParser.formatForJson(by) + "\"}";
+        return "{\"type\":\"D\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription())
+                + "\",\"by\":\"" + DateTimeParser.formatForJson(by) + "\"}";
     }
 
     public static Deadline fromJson(String jsonLine) throws IOException {
@@ -43,7 +44,9 @@ public class Deadline extends Task {
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
-                if (keyValue.length != 2) continue;
+                if (keyValue.length != 2) {
+                    continue;
+                }
                 
                 String key = keyValue[0].trim().replace("\"", "");
                 String value = keyValue[1].trim();

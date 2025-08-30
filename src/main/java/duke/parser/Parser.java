@@ -107,7 +107,8 @@ public class Parser {
         try {
             int taskNum = Integer.parseInt(parts[1]);
             if (taskNum < 1 || taskNum > maxTasks) {
-                throw new InvalidTaskNumberException("OOPS!!! Task number " + taskNum + " is out of range. You have " + maxTasks + " tasks.");
+                throw new InvalidTaskNumberException("OOPS!!! Task number " + taskNum
+                        + " is out of range. You have " + maxTasks + " tasks.");
             }
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException("OOPS!!! Task number must be a valid number.");

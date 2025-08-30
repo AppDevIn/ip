@@ -1,11 +1,6 @@
 package duke.command;
 
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
-import duke.task.Task;
-import duke.task.Todo;
-import duke.task.Deadline;
-import duke.task.Event;
 import duke.storage.Storage;
 import duke.storage.TaskList;
 import duke.ui.Ui;
@@ -25,8 +20,8 @@ public class UnmarkCommand extends Command {
         int unmarkNum = Integer.parseInt(parts[1]);
         tasks.unmarkTask(unmarkNum - 1);
         ui.showMessages(
-            " OK, I've marked this task as not done yet:",
-            "   " + tasks.get(unmarkNum - 1)
+                " OK, I've marked this task as not done yet:",
+                "   " + tasks.get(unmarkNum - 1)
         );
         saveTasksToFile(tasks, ui, storage);
     }

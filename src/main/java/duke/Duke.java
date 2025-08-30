@@ -8,12 +8,22 @@ import duke.command.Command;
 import duke.parser.Parser;
 import duke.exception.DukeException;
 
+/**
+ * Main class for the Duke personal assistant chatbot application.
+ * Handles initialization, command processing loop, and coordinates between UI, storage, and task management.
+ */
 public class Duke {
     
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Creates a new Duke instance with the specified file path for task storage.
+     * Initializes the UI, storage, and attempts to load existing tasks.
+     * 
+     * @param filePath the name of the file to store tasks in
+     */
     public Duke(String filePath) {
         ui = new Ui();
         storage = new Storage("data", filePath);
@@ -25,6 +35,10 @@ public class Duke {
         }
     }
 
+    /**
+     * Starts the main command processing loop for the Duke application.
+     * Displays welcome message, processes user commands until exit, then shows goodbye message.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -42,6 +56,11 @@ public class Duke {
         ui.close();
     }
 
+    /**
+     * Main entry point for the Duke application.
+     * 
+     * @param args command line arguments (not used)
+     */
     public static void main(String[] args) {
         new Duke("duke.txt").run();
     }

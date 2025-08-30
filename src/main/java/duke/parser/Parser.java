@@ -3,8 +3,21 @@ package duke.parser;
 import duke.command.*;
 import duke.exception.*;
 
+/**
+ * Utility class for parsing user input commands and converting them into Command objects.
+ * Handles validation of command formats and parameters.
+ */
 public class Parser {
     
+    /**
+     * Parses the user input command string and returns the appropriate Command object.
+     * Validates the input format and parameters based on the command type and current task count.
+     *
+     * @param input the command string entered by the user
+     * @param taskCount the current number of tasks in the task list
+     * @return the corresponding Command object based on the input
+     * @throws DukeException if the input is invalid or command parameters are incorrect
+     */
     public static Command parse(String input, int taskCount) throws DukeException {
         if (input == null || input.trim().isEmpty()) {
             throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
@@ -41,6 +54,12 @@ public class Parser {
     }
     
     
+    /**
+     * Validates the format of a todo command input.
+     * 
+     * @param input the todo command string to validate
+     * @throws TodoException if the todo description is empty or contains only whitespace
+     */
     private static void validateTodoInput(String input) throws TodoException {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("todo") || trimmed.matches("todo\\s*")) {
@@ -48,6 +67,12 @@ public class Parser {
         }
     }
     
+    /**
+     * Validates the format of a deadline command input.
+     * 
+     * @param input the deadline command string to validate
+     * @throws DeadlineException if the deadline format is incorrect or missing required parts
+     */
     private static void validateDeadlineInput(String input) throws DeadlineException {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("deadline") || trimmed.matches("deadline\\s*")) {
@@ -64,6 +89,12 @@ public class Parser {
         }
     }
     
+    /**
+     * Validates the format of an event command input.
+     * 
+     * @param input the event command string to validate
+     * @throws EventException if the event format is incorrect or missing required time parameters
+     */
     private static void validateEventInput(String input) throws EventException {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("event") || trimmed.matches("event\\s*")) {
@@ -85,6 +116,13 @@ public class Parser {
         }
     }
     
+    /**
+     * Validates that a task number command has a valid task number parameter.
+     * 
+     * @param input the command string containing the task number
+     * @param maxTasks the maximum number of tasks currently in the task list
+     * @throws InvalidTaskNumberException if the task number is missing, invalid, or out of range
+     */
     private static void validateTaskNumber(String input, int maxTasks) throws InvalidTaskNumberException {
         String[] parts = input.split(" ");
         if (parts.length != 2) {

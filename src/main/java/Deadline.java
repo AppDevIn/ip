@@ -1,26 +1,33 @@
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 public class Deadline extends Task {
 
-    protected String by;
+    protected LocalDateTime by;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, String by) throws DateTimeParseException {
+        super(description);
+        this.by = DateTimeParser.parseDateTime(by);
+    }
+
+    public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + DateTimeParser.formatForDisplay(by) + ")";
     }
 
-    public String getBy() {
+    public LocalDateTime getBy() {
         return by;
     }
 
     @Override
     public String toJson() {
-        return "{\"type\":\"D\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"by\":\"" + escapeJson(by) + "\"}";
+        return "{\"type\":\"D\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"by\":\"" + DateTimeParser.formatForJson(by) + "\"}";
     }
 
     public static Deadline fromJson(String jsonLine) throws IOException {
@@ -31,7 +38,7 @@ public class Deadline extends Task {
             
             boolean isDone = false;
             String description = null;
-            String by = null;
+            LocalDateTime by = null;
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
@@ -48,7 +55,8 @@ public class Deadline extends Task {
                         description = unescapeJson(value.substring(1, value.length() - 1));
                         break;
                     case "by":
-                        by = unescapeJson(value.substring(1, value.length() - 1));
+                        String byString = unescapeJson(value.substring(1, value.length() - 1));
+                        by = DateTimeParser.parseFromJson(byString);
                         break;
                 }
             }

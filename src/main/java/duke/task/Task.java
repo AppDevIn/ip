@@ -1,3 +1,4 @@
+package duke.task;
 import java.io.IOException;
 
 public abstract class Task {

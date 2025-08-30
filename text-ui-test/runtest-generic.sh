@@ -23,6 +23,12 @@ then
     rm "$ACTUAL_FILE"
 fi
 
+# delete data directory from previous run to ensure clean test state
+if [ -d "data" ]
+then
+    rm -rf data
+fi
+
 # compile the code into the bin folder, terminates if error occurred
 javac -cp ../src/main/java -Xlint:none -d ../bin ../src/main/java/*.java
 if [ $? -ne 0 ]

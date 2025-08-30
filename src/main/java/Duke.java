@@ -7,12 +7,13 @@ public class Duke {
         ui.showWelcome();
 
         Storage storage = new Storage();
-        ArrayList<Task> listOfItems = new ArrayList<>();
+        TaskList tasks;
         
         try {
-            listOfItems = storage.loadTasksFromFile();
+            tasks = new TaskList(storage.loadTasksFromFile());
         } catch (IOException e) {
             ui.showError("Could not load saved tasks. " + e.getMessage());
+            tasks = new TaskList();
         }
 
 
@@ -25,41 +26,41 @@ public class Duke {
                 switch (command) {
                     case LIST:
                         ui.showLine();
-                        ui.showTaskList(listOfItems);
+                        ui.showTaskList(tasks.getList());
                         ui.showLine();
                         break;
                         
                     case MARK:
-                        validateTaskNumber(input, listOfItems.size());
+                        validateTaskNumber(input, tasks.size());
                         String[] split = input.split(" ");
                         int taskNum = Integer.parseInt(split[1]);
-                        listOfItems.get(taskNum - 1).markAsDone();
+                        tasks.markTask(taskNum - 1);
                         ui.showMessages(
                             " Nice! I've marked this task as done:",
-                            "   " + listOfItems.get(taskNum - 1)
+                            "   " + tasks.get(taskNum - 1)
                         );
-                        saveTasksToFile(storage, listOfItems, ui);
+                        saveTasksToFile(storage, tasks.getList(), ui);
                         break;
                         
                     case UNMARK:
-                        validateTaskNumber(input, listOfItems.size());
+                        validateTaskNumber(input, tasks.size());
                         String[] parts = input.split(" ");
                         int unmarkNum = Integer.parseInt(parts[1]);
-                        listOfItems.get(unmarkNum - 1).markAsUndone();
+                        tasks.unmarkTask(unmarkNum - 1);
                         ui.showMessages(
                             " OK, I've marked this task as not done yet:",
-                            "   " + listOfItems.get(unmarkNum - 1)
+                            "   " + tasks.get(unmarkNum - 1)
                         );
-                        saveTasksToFile(storage, listOfItems, ui);
+                        saveTasksToFile(storage, tasks.getList(), ui);
                         break;
                         
                     case TODO:
                         validateTodoInput(input);
                         String description = input.substring(4).trim();
                         Task newTask = new Todo(description);
-                        listOfItems.add(newTask);
-                        ui.showTaskAdded(newTask, listOfItems.size());
-                        saveTasksToFile(storage, listOfItems, ui);
+                        tasks.add(newTask);
+                        ui.showTaskAdded(newTask, tasks.size());
+                        saveTasksToFile(storage, tasks.getList(), ui);
                         break;
                         
                     case DEADLINE:

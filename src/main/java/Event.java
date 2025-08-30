@@ -1,11 +1,19 @@
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 public class Event extends Task {
 
-    protected String from;
-    protected String to;
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
-    public Event(String description, String from, String to) {
+    public Event(String description, String from, String to) throws DateTimeParseException {
+        super(description);
+        this.from = DateTimeParser.parseDateTime(from);
+        this.to = DateTimeParser.parseDateTime(to);
+    }
+
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
         this.from = from;
         this.to = to;
@@ -13,20 +21,20 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[E]" + super.toString() + " (from: " + DateTimeParser.formatForDisplay(from) + " to: " + DateTimeParser.formatForDisplay(to) + ")";
     }
 
-    public String getFrom() {
+    public LocalDateTime getFrom() {
         return from;
     }
 
-    public String getTo() {
+    public LocalDateTime getTo() {
         return to;
     }
 
     @Override
     public String toJson() {
-        return "{\"type\":\"E\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"from\":\"" + escapeJson(from) + "\",\"to\":\"" + escapeJson(to) + "\"}";
+        return "{\"type\":\"E\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"from\":\"" + DateTimeParser.formatForJson(from) + "\",\"to\":\"" + DateTimeParser.formatForJson(to) + "\"}";
     }
 
     public static Event fromJson(String jsonLine) throws IOException {
@@ -37,8 +45,8 @@ public class Event extends Task {
             
             boolean isDone = false;
             String description = null;
-            String from = null;
-            String to = null;
+            LocalDateTime from = null;
+            LocalDateTime to = null;
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
@@ -55,10 +63,12 @@ public class Event extends Task {
                         description = unescapeJson(value.substring(1, value.length() - 1));
                         break;
                     case "from":
-                        from = unescapeJson(value.substring(1, value.length() - 1));
+                        String fromString = unescapeJson(value.substring(1, value.length() - 1));
+                        from = DateTimeParser.parseFromJson(fromString);
                         break;
                     case "to":
-                        to = unescapeJson(value.substring(1, value.length() - 1));
+                        String toString = unescapeJson(value.substring(1, value.length() - 1));
+                        to = DateTimeParser.parseFromJson(toString);
                         break;
                 }
             }

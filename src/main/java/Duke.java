@@ -81,10 +81,14 @@ public class Duke {
                         String[] deadlineParts = input.split(" /by ");
                         String deadlineDesc = deadlineParts[0].substring(8).trim();
                         String by = deadlineParts[1];
-                        Task deadlineTask = new Deadline(deadlineDesc, by);
-                        listOfItems.add(deadlineTask);
-                        printTaskAddedMessage(deadlineTask, listOfItems.size());
-                        saveTasksToFile(storage, listOfItems);
+                        try {
+                            Task deadlineTask = new Deadline(deadlineDesc, by);
+                            listOfItems.add(deadlineTask);
+                            printTaskAddedMessage(deadlineTask, listOfItems.size());
+                            saveTasksToFile(storage, listOfItems);
+                        } catch (DateTimeParseException e) {
+                            printMessage(" OOPS!!! " + e.getMessage());
+                        }
                         break;
                         
                     case EVENT:
@@ -94,10 +98,14 @@ public class Duke {
                         String[] toSplit = fromSplit[1].split(" /to ");
                         String from = toSplit[0];
                         String to = toSplit[1];
-                        Task eventTask = new Event(eventDesc, from, to);
-                        listOfItems.add(eventTask);
-                        printTaskAddedMessage(eventTask, listOfItems.size());
-                        saveTasksToFile(storage, listOfItems);
+                        try {
+                            Task eventTask = new Event(eventDesc, from, to);
+                            listOfItems.add(eventTask);
+                            printTaskAddedMessage(eventTask, listOfItems.size());
+                            saveTasksToFile(storage, listOfItems);
+                        } catch (DateTimeParseException e) {
+                            printMessage(" OOPS!!! " + e.getMessage());
+                        }
                         break;
                         
                     case DELETE:

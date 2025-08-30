@@ -28,7 +28,7 @@ public class Ui {
                 + "|  _| | |_| || |  | | |  _  |\n"
                 + "|____ |____/|___| |_| |_| |_|\n";
         System.out.println("Hello from\n" + logo);
-        
+
         showMessages(
                 " Hello! I'm E.D.I.T.H.",
                 " What can I do for you?"
@@ -37,7 +37,7 @@ public class Ui {
 
     /**
      * Reads whatever the user types in as their next command.
-     * 
+     *
      * @return the user's input as a string
      */
     public String readCommand() {
@@ -50,7 +50,7 @@ public class Ui {
 
     /**
      * Shows a single message wrapped in those nice divider lines.
-     * 
+     *
      * @param message the message to display to the user
      */
     public void showMessage(String message) {
@@ -62,7 +62,7 @@ public class Ui {
     /**
      * Shows multiple messages at once, all wrapped in the same divider block.
      * Saves some screen space when you have related things to say.
-     * 
+     *
      * @param messages variable number of messages to display
      */
     public void showMessages(String... messages) {
@@ -76,7 +76,7 @@ public class Ui {
     /**
      * Displays all tasks in a numbered list format.
      * Makes it easy for users to see what they've got on their plate.
-     * 
+     *
      * @param items the list of tasks to display
      */
     public void showTaskList(ArrayList<Task> items) {
@@ -87,9 +87,27 @@ public class Ui {
     }
 
     /**
+     * Shows the search results from a find command.
+     * Displays matching tasks with their original numbering from the task list.
+     *
+     * @param matchingTasks the list of tasks that match the search criteria
+     * @param originalIndices the original indices of the matching tasks in the full list
+     */
+    public void showFoundTasks(ArrayList<Task> matchingTasks, ArrayList<Integer> originalIndices) {
+        if (matchingTasks.isEmpty()) {
+            System.out.println(" No matching tasks found.");
+        } else {
+            System.out.println(" Here are the matching tasks in your list:");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                System.out.println(" " + originalIndices.get(i) + "." + matchingTasks.get(i));
+            }
+        }
+    }
+
+    /**
      * Shows confirmation when a task gets added successfully.
      * Includes the task details and updated count so users know what happened.
-     * 
+     *
      * @param task the task that was just added
      * @param taskCount the new total number of tasks
      */
@@ -108,7 +126,7 @@ public class Ui {
     /**
      * Displays error messages when things go wrong.
      * Keeps the formatting consistent even for bad news.
-     * 
+     *
      * @param errorMessage the error message to show the user
      */
     public void showError(String errorMessage) {

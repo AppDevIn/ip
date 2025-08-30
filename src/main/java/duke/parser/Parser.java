@@ -5,6 +5,7 @@ import duke.command.DeadlineCommand;
 import duke.command.DeleteCommand;
 import duke.command.EventCommand;
 import duke.command.ExitCommand;
+import duke.command.FindCommand;
 import duke.command.ListCommand;
 import duke.command.MarkCommand;
 import duke.command.TodoCommand;
@@ -12,6 +13,7 @@ import duke.command.UnmarkCommand;
 import duke.exception.DeadlineException;
 import duke.exception.DukeException;
 import duke.exception.EventException;
+import duke.exception.FindException;
 import duke.exception.InvalidCommandException;
 import duke.exception.InvalidTaskNumberException;
 import duke.exception.TodoException;
@@ -21,7 +23,7 @@ import duke.exception.TodoException;
  * Handles validation of command formats and parameters.
  */
 public class Parser {
-    
+
     /**
      * Parses the user input command string and returns the appropriate Command object.
      * Validates the input format and parameters based on the command type and current task count.
@@ -35,9 +37,9 @@ public class Parser {
         if (input == null || input.trim().isEmpty()) {
             throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
-        
+
         String command = input.toLowerCase().trim().split(" ")[0];
-        
+
         switch (command) {
             case "todo":
                 validateTodoInput(input);
@@ -59,17 +61,20 @@ public class Parser {
             case "delete":
                 validateTaskNumber(input, taskCount);
                 return new DeleteCommand(input);
+            case "find":
+                validateFindInput(input);
+                return new FindCommand(input);
             case "bye":
                 return new ExitCommand();
             default:
                 throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
     }
-    
-    
+
+
     /**
      * Validates the format of a todo command input.
-     * 
+     *
      * @param input the todo command string to validate
      * @throws TodoException if the todo description is empty or contains only whitespace
      */
@@ -79,10 +84,10 @@ public class Parser {
             throw new TodoException("OOPS!!! The description of a todo cannot be empty.");
         }
     }
-    
+
     /**
      * Validates the format of a deadline command input.
-     * 
+     *
      * @param input the deadline command string to validate
      * @throws DeadlineException if the deadline format is incorrect or missing required parts
      */
@@ -101,10 +106,10 @@ public class Parser {
             throw new DeadlineException("OOPS!!! The deadline time cannot be empty.");
         }
     }
-    
+
     /**
      * Validates the format of an event command input.
-     * 
+     *
      * @param input the event command string to validate
      * @throws EventException if the event format is incorrect or missing required time parameters
      */
@@ -128,10 +133,10 @@ public class Parser {
             throw new EventException("OOPS!!! Event times cannot be empty.");
         }
     }
-    
+
     /**
      * Validates that a task number command has a valid task number parameter.
-     * 
+     *
      * @param input the command string containing the task number
      * @param maxTasks the maximum number of tasks currently in the task list
      * @throws InvalidTaskNumberException if the task number is missing, invalid, or out of range
@@ -150,6 +155,19 @@ public class Parser {
             }
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException("OOPS!!! Task number must be a valid number.");
+        }
+    }
+
+    /**
+     * Validates the format of a find command input.
+     *
+     * @param input the find command string to validate
+     * @throws FindException if the search keyword is empty or contains only whitespace
+     */
+    private static void validateFindInput(String input) throws FindException {
+        String trimmed = input.trim().toLowerCase();
+        if (trimmed.equals("find") || trimmed.matches("find\\s*")) {
+            throw new FindException("OOPS!!! The search keyword cannot be empty.");
         }
     }
 }

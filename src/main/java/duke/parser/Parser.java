@@ -1,7 +1,20 @@
 package duke.parser;
 
-import duke.command.*;
-import duke.exception.*;
+import duke.command.Command;
+import duke.command.DeadlineCommand;
+import duke.command.DeleteCommand;
+import duke.command.EventCommand;
+import duke.command.ExitCommand;
+import duke.command.ListCommand;
+import duke.command.MarkCommand;
+import duke.command.TodoCommand;
+import duke.command.UnmarkCommand;
+import duke.exception.DeadlineException;
+import duke.exception.DukeException;
+import duke.exception.EventException;
+import duke.exception.InvalidCommandException;
+import duke.exception.InvalidTaskNumberException;
+import duke.exception.TodoException;
 
 /**
  * Utility class for parsing user input commands and converting them into Command objects.
@@ -132,7 +145,8 @@ public class Parser {
         try {
             int taskNum = Integer.parseInt(parts[1]);
             if (taskNum < 1 || taskNum > maxTasks) {
-                throw new InvalidTaskNumberException("OOPS!!! Task number " + taskNum + " is out of range. You have " + maxTasks + " tasks.");
+                throw new InvalidTaskNumberException("OOPS!!! Task number " + taskNum
+                        + " is out of range. You have " + maxTasks + " tasks.");
             }
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException("OOPS!!! Task number must be a valid number.");

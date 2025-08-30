@@ -46,7 +46,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + DateTimeParser.formatForDisplay(from) + " to: " + DateTimeParser.formatForDisplay(to) + ")";
+        return "[E]" + super.toString() + " (from: " + DateTimeParser.formatForDisplay(from)
+                + " to: " + DateTimeParser.formatForDisplay(to) + ")";
     }
 
     /**
@@ -74,7 +75,9 @@ public class Event extends Task {
      */
     @Override
     public String toJson() {
-        return "{\"type\":\"E\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"from\":\"" + DateTimeParser.formatForJson(from) + "\",\"to\":\"" + DateTimeParser.formatForJson(to) + "\"}";
+        return "{\"type\":\"E\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription())
+                + "\",\"from\":\"" + DateTimeParser.formatForJson(from) + "\",\"to\":\""
+                + DateTimeParser.formatForJson(to) + "\"}";
     }
 
     /**
@@ -98,7 +101,9 @@ public class Event extends Task {
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
-                if (keyValue.length != 2) continue;
+                if (keyValue.length != 2) {
+                    continue;
+                }
                 
                 String key = keyValue[0].trim().replace("\"", "");
                 String value = keyValue[1].trim();

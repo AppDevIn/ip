@@ -1,11 +1,7 @@
 package duke.command;
 
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
 import duke.task.Task;
-import duke.task.Todo;
-import duke.task.Deadline;
-import duke.task.Event;
 import duke.storage.Storage;
 import duke.storage.TaskList;
 import duke.ui.Ui;
@@ -25,9 +21,9 @@ public class DeleteCommand extends Command {
         int deleteNum = Integer.parseInt(deleteParts[1]);
         Task removedTask = tasks.delete(deleteNum - 1);
         ui.showMessages(
-            " Noted. I've removed this task:",
-            "   " + removedTask,
-            " Now you have " + tasks.size() + " tasks in the list."
+                " Noted. I've removed this task:",
+                "   " + removedTask,
+                " Now you have " + tasks.size() + " tasks in the list."
         );
         saveTasksToFile(tasks, ui, storage);
     }

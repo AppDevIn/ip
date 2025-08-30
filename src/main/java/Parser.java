@@ -2,7 +2,7 @@ import java.time.format.DateTimeParseException;
 
 public class Parser {
     
-    public CommandType parseCommand(String input, int taskCount) throws DukeException {
+    public static CommandType parseCommand(String input, int taskCount) throws DukeException {
         if (input == null || input.trim().isEmpty()) {
             throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
@@ -38,14 +38,14 @@ public class Parser {
     }
     
     
-    private void validateTodoInput(String input) throws TodoException {
+    private static void validateTodoInput(String input) throws TodoException {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("todo") || trimmed.matches("todo\\s*")) {
             throw new TodoException("OOPS!!! The description of a todo cannot be empty.");
         }
     }
     
-    private void validateDeadlineInput(String input) throws DeadlineException {
+    private static void validateDeadlineInput(String input) throws DeadlineException {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("deadline") || trimmed.matches("deadline\\s*")) {
             throw new DeadlineException("OOPS!!! The description of a deadline cannot be empty.");
@@ -61,7 +61,7 @@ public class Parser {
         }
     }
     
-    private void validateEventInput(String input) throws EventException {
+    private static void validateEventInput(String input) throws EventException {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("event") || trimmed.matches("event\\s*")) {
             throw new EventException("OOPS!!! The description of an event cannot be empty.");
@@ -82,7 +82,7 @@ public class Parser {
         }
     }
     
-    private void validateTaskNumber(String input, int maxTasks) throws InvalidTaskNumberException {
+    private static void validateTaskNumber(String input, int maxTasks) throws InvalidTaskNumberException {
         String[] parts = input.split(" ");
         if (parts.length != 2) {
             throw new InvalidTaskNumberException("OOPS!!! Please provide a task number.");

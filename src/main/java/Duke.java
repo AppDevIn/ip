@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,7 +11,14 @@ public class Duke {
                 + "|____ |____/|___| |_| |_| |_|\n";
         System.out.println("Hello from\n" + logo);
 
+        Storage storage = new Storage();
         ArrayList<Task> listOfItems = new ArrayList<>();
+        
+        try {
+            listOfItems = storage.loadTasksFromFile();
+        } catch (IOException e) {
+            printMessage(" Could not load saved tasks. " + e.getMessage());
+        }
 
 
         printMessages(
@@ -43,6 +51,7 @@ public class Duke {
                             " Nice! I've marked this task as done:",
                             "   " + listOfItems.get(taskNum - 1)
                         );
+                        saveTasksToFile(storage, listOfItems);
                         break;
                         
                     case UNMARK:
@@ -54,6 +63,7 @@ public class Duke {
                             " OK, I've marked this task as not done yet:",
                             "   " + listOfItems.get(unmarkNum - 1)
                         );
+                        saveTasksToFile(storage, listOfItems);
                         break;
                         
                     case TODO:
@@ -62,6 +72,7 @@ public class Duke {
                         Task newTask = new Todo(description);
                         listOfItems.add(newTask);
                         printTaskAddedMessage(newTask, listOfItems.size());
+                        saveTasksToFile(storage, listOfItems);
                         break;
                         
                     case DEADLINE:
@@ -72,6 +83,7 @@ public class Duke {
                         Task deadlineTask = new Deadline(deadlineDesc, by);
                         listOfItems.add(deadlineTask);
                         printTaskAddedMessage(deadlineTask, listOfItems.size());
+                        saveTasksToFile(storage, listOfItems);
                         break;
                         
                     case EVENT:
@@ -84,6 +96,7 @@ public class Duke {
                         Task eventTask = new Event(eventDesc, from, to);
                         listOfItems.add(eventTask);
                         printTaskAddedMessage(eventTask, listOfItems.size());
+                        saveTasksToFile(storage, listOfItems);
                         break;
                         
                     case DELETE:
@@ -96,6 +109,7 @@ public class Duke {
                             "   " + removedTask,
                             " Now you have " + listOfItems.size() + " tasks in the list."
                         );
+                        saveTasksToFile(storage, listOfItems);
                         break;
                         
                     case BYE:
@@ -207,6 +221,14 @@ public class Duke {
             }
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException("OOPS!!! Task number must be a valid number.");
+        }
+    }
+
+    private static void saveTasksToFile(Storage storage, ArrayList<Task> tasks) {
+        try {
+            storage.saveTasksToFile(tasks);
+        } catch (IOException e) {
+            printMessage(" Warning: Could not save tasks to file. " + e.getMessage());
         }
     }
 }

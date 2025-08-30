@@ -1,0 +1,12 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'duke.Duke'
+}

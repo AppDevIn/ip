@@ -1,5 +1,6 @@
 package edith.task;
 import java.io.IOException;
+import java.time.Duration;
 
 /**
  * Abstract base class representing a task in the E.D.I.T.H. task management system.
@@ -9,6 +10,7 @@ import java.io.IOException;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
+    protected Duration duration;
 
     /**
      * Creates a new task with the specified description.
@@ -21,6 +23,7 @@ public abstract class Task {
         assert !description.trim().isEmpty() : "Task description cannot be empty or whitespace only";
         this.description = description;
         this.isDone = false;
+        this.duration = null;
     }
 
     /**
@@ -64,9 +67,25 @@ public abstract class Task {
         return isDone;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setDuration(String durationStr) {
+        this.duration = DurationParser.parseDuration(durationStr);
+    }
+
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        String base = "[" + getStatusIcon() + "] " + description;
+        if (duration != null) {
+            base += " (duration: " + DurationParser.formatDuration(duration) + ")";
+        }
+        return base;
     }
 
     /**

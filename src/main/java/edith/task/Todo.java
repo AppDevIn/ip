@@ -1,5 +1,6 @@
 package edith.task;
 import java.io.IOException;
+import java.time.Duration;
 
 /**
  * Represents a todo task with a description that can be marked as done or undone.
@@ -34,7 +35,12 @@ public class Todo extends Task {
      */
     @Override
     public String toJson() {
-        return "{\"type\":\"T\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\"}";
+        String json = "{\"type\":\"T\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\"";
+        if (getDuration() != null) {
+            json += ",\"duration\":\"" + DurationParser.formatDurationForJson(getDuration()) + "\"";
+        }
+        json += "}";
+        return json;
     }
 
     /**
@@ -53,6 +59,7 @@ public class Todo extends Task {
             
             boolean isDone = false;
             String description = null;
+            Duration duration = null;
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
@@ -70,6 +77,10 @@ public class Todo extends Task {
                     case "description":
                         description = unescapeJson(value.substring(1, value.length() - 1));
                         break;
+                    case "duration":
+                        String durationString = unescapeJson(value.substring(1, value.length() - 1));
+                        duration = DurationParser.parseDurationFromJson(durationString);
+                        break;
                 }
             }
             
@@ -80,6 +91,9 @@ public class Todo extends Task {
             Todo todo = new Todo(description);
             if (isDone) {
                 todo.markAsDone();
+            }
+            if (duration != null) {
+                todo.setDuration(duration);
             }
             
             return todo;

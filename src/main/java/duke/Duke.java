@@ -3,6 +3,7 @@ package duke;
 import java.io.IOException;
 import duke.storage.Storage;
 import duke.storage.TaskList;
+import duke.ui.GuiUi;
 import duke.ui.Ui;
 import duke.command.Command;
 import duke.parser.Parser;
@@ -13,7 +14,7 @@ import duke.exception.DukeException;
  * Handles initialization, command processing loop, and coordinates between UI, storage, and task management.
  */
 public class Duke {
-    
+
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
@@ -21,7 +22,7 @@ public class Duke {
     /**
      * Creates a new Duke instance with the specified file path for task storage.
      * Initializes the UI, storage, and attempts to load existing tasks.
-     * 
+     *
      * @param filePath the name of the file to store tasks in
      */
     public Duke(String filePath) {
@@ -56,19 +57,46 @@ public class Duke {
         ui.close();
     }
 
+    private boolean shouldExit = false;
+
     /**
-     * Generates a response for the user's chat message.
+     * Generates a response for the user's chat message using the command processing system.
+     * This method processes the input through the parser and executes the appropriate command,
+     * returning the response that would be displayed to the user.
      *
      * @param input The user's input message
      * @return Duke's response to the user input
      */
     public String getResponse(String input) {
-        return "Duke heard: " + input;
+        try {
+            Command c = Parser.parse(input, tasks.size());
+
+            GuiUi guiUi = new GuiUi();
+            c.execute(tasks, guiUi, storage);
+
+            shouldExit = c.isExit();
+
+            return guiUi.getResponse();
+
+        } catch (DukeException e) {
+            return "Error: " + e.getMessage();
+        } catch (Exception e) {
+            return "An unexpected error occurred: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Checks if the last processed command was an exit command.
+     *
+     * @return true if the application should exit, false otherwise
+     */
+    public boolean shouldExit() {
+        return shouldExit;
     }
 
     /**
      * Main entry point for the Duke application.
-     * 
+     *
      * @param args command line arguments (not used)
      */
     public static void main(String[] args) {

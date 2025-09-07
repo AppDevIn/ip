@@ -1,7 +1,12 @@
 package duke;
 
+import java.io.IOException;
+import java.util.Collections;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -10,64 +15,45 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
- * Custom control representing a dialog box in the chat interface.
- * Contains a text label and an image view for the user avatar.
- * Extends HBox to arrange components horizontally.
+ * Represents a dialog box consisting of an ImageView to represent the speaker's face
+ * and a label containing text from the speaker.
  */
 public class DialogBox extends HBox {
-
-    private Label text;
+    @FXML
+    private Label dialog;
+    @FXML
     private ImageView displayPicture;
 
-    /**
-     * Creates a new dialog box with the specified text and image.
-     * Sets up the layout with text wrapping and proper image sizing.
-     *
-     * @param text The text content to display in the dialog
-     * @param image The image to display as the user avatar
-     */
-    public DialogBox(String text, Image image) {
-        this.text = new Label(text);
-        displayPicture = new ImageView(image);
+    private DialogBox(String text, Image img) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+            fxmlLoader.setController(this);
+            fxmlLoader.setRoot(this);
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        this.text.setWrapText(true);
-        displayPicture.setFitWidth(100.0);
-        displayPicture.setFitHeight(100.0);
-        this.setAlignment(Pos.TOP_RIGHT);
-
-        this.getChildren().addAll(this.text, displayPicture);
+        dialog.setText(text);
+        displayPicture.setImage(img);
     }
 
     /**
      * Flips the dialog box such that the ImageView is on the left and text on the right.
      */
     private void flip() {
-        this.setAlignment(Pos.TOP_LEFT);
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
-        FXCollections.reverse(tmp);
-        this.getChildren().setAll(tmp);
+        Collections.reverse(tmp);
+        getChildren().setAll(tmp);
+        setAlignment(Pos.TOP_LEFT);
     }
 
-    /**
-     * Creates a dialog box for user messages.
-     *
-     * @param text The text content to display
-     * @param image The user avatar image
-     * @return A DialogBox configured for user messages
-     */
-    public static DialogBox getUserDialog(String text, Image image) {
-        return new DialogBox(text, image);
+    public static DialogBox getUserDialog(String text, Image img) {
+        return new DialogBox(text, img);
     }
 
-    /**
-     * Creates a dialog box for Duke messages with flipped layout.
-     *
-     * @param text The text content to display
-     * @param image The Duke avatar image
-     * @return A DialogBox configured for Duke messages
-     */
-    public static DialogBox getDukeDialog(String text, Image image) {
-        var db = new DialogBox(text, image);
+    public static DialogBox getDukeDialog(String text, Image img) {
+        var db = new DialogBox(text, img);
         db.flip();
         return db;
     }

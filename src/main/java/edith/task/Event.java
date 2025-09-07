@@ -77,7 +77,7 @@ public class Event extends Task {
     public String toJson() {
         return "{\"type\":\"E\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription())
                 + "\",\"from\":\"" + DateTimeParser.formatForJson(from) + "\",\"to\":\""
-                + DateTimeParser.formatForJson(to) + "\"}";
+                + DateTimeParser.formatForJson(to) + "\",\"note\":\"" + escapeJson(getNote()) + "\"}";
     }
 
     /**
@@ -98,6 +98,7 @@ public class Event extends Task {
             String description = null;
             LocalDateTime from = null;
             LocalDateTime to = null;
+            String note = "";
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
@@ -123,6 +124,9 @@ public class Event extends Task {
                         String toString = unescapeJson(value.substring(1, value.length() - 1));
                         to = DateTimeParser.parseFromJson(toString);
                         break;
+                    case "note":
+                        note = unescapeJson(value.substring(1, value.length() - 1));
+                        break;
                 }
             }
             
@@ -134,6 +138,7 @@ public class Event extends Task {
             if (isDone) {
                 event.markAsDone();
             }
+            event.setNote(note);
             
             return event;
         } catch (Exception e) {

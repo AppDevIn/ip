@@ -53,20 +53,20 @@ public class TodoTest {
     @Test
     public void toJson_unmarkedTodo_correctFormat() {
         Todo todo = new Todo("read book");
-        assertEquals("{\"type\":\"T\",\"done\":false,\"description\":\"read book\"}", todo.toJson());
+        assertEquals("{\"type\":\"T\",\"done\":false,\"description\":\"read book\",\"note\":\"\"}", todo.toJson());
     }
     
     @Test
     public void toJson_markedTodo_correctFormat() {
         Todo todo = new Todo("read book");
         todo.markAsDone();
-        assertEquals("{\"type\":\"T\",\"done\":true,\"description\":\"read book\"}", todo.toJson());
+        assertEquals("{\"type\":\"T\",\"done\":true,\"description\":\"read book\",\"note\":\"\"}", todo.toJson());
     }
     
     @Test
     public void toJson_todoWithSpecialCharacters_escapesCorrectly() {
         Todo todo = new Todo("read \"book\" with \\backslash");
-        String expected = "{\"type\":\"T\",\"done\":false,\"description\":\"read \\\"book\\\" with \\\\backslash\"}";
+        String expected = "{\"type\":\"T\",\"done\":false,\"description\":\"read \\\"book\\\" with \\\\backslash\",\"note\":\"\"}";
         assertEquals(expected, todo.toJson());
     }
 }

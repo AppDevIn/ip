@@ -11,7 +11,7 @@ public class Todo extends Task {
     /**
      * Creates a new Todo task with the specified description.
      * The task is initially marked as not done.
-     * 
+     *
      * @param description the description of the todo task
      */
     public Todo(String description) {
@@ -20,7 +20,7 @@ public class Todo extends Task {
 
     /**
      * Returns a string representation of the todo task in the format "[T][status] description".
-     * 
+     *
      * @return formatted string representation of the todo task
      */
     @Override
@@ -30,7 +30,7 @@ public class Todo extends Task {
 
     /**
      * Converts the todo task to its JSON string representation for storage.
-     * 
+     *
      * @return JSON string containing the task type, completion status, and description
      */
     @Override
@@ -39,14 +39,14 @@ public class Todo extends Task {
         if (getDuration() != null) {
             json += ",\"duration\":\"" + DurationParser.formatDurationForJson(getDuration()) + "\"";
         }
-        json += "}";
+        json += ",\"note\":\"" + escapeJson(getNote()) + "\"}";
         return json;
     }
 
     /**
      * Creates a Todo task from its JSON string representation.
      * Parses the JSON to extract task completion status and description.
-     * 
+     *
      * @param jsonLine the JSON string representation of the todo task
      * @return a Todo object created from the JSON data
      * @throws IOException if the JSON format is invalid or parsing fails
@@ -56,20 +56,21 @@ public class Todo extends Task {
             String json = jsonLine.trim();
             String content = json.substring(1, json.length() - 1);
             String[] pairs = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            
+
             boolean isDone = false;
             String description = null;
             Duration duration = null;
-            
+            String note = "";
+
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
                 if (keyValue.length != 2) {
                     continue;
                 }
-                
+
                 String key = keyValue[0].trim().replace("\"", "");
                 String value = keyValue[1].trim();
-                
+
                 switch (key) {
                     case "done":
                         isDone = Boolean.parseBoolean(value);
@@ -77,17 +78,20 @@ public class Todo extends Task {
                     case "description":
                         description = unescapeJson(value.substring(1, value.length() - 1));
                         break;
+                    case "note":
+                        note = unescapeJson(value.substring(1, value.length() - 1));
+                        break;
                     case "duration":
                         String durationString = unescapeJson(value.substring(1, value.length() - 1));
                         duration = DurationParser.parseDurationFromJson(durationString);
                         break;
                 }
             }
-            
+
             if (description == null) {
                 throw new IOException("Missing description field in Todo JSON: " + jsonLine);
             }
-            
+
             Todo todo = new Todo(description);
             if (isDone) {
                 todo.markAsDone();
@@ -95,7 +99,8 @@ public class Todo extends Task {
             if (duration != null) {
                 todo.setDuration(duration);
             }
-            
+            todo.setNote(note);
+
             return todo;
         } catch (Exception e) {
             throw new IOException("Failed to parse Todo JSON: " + jsonLine + " - " + e.getMessage());

@@ -1,5 +1,8 @@
 package edith.storage;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import edith.task.Task;
 
 /**
@@ -89,5 +92,48 @@ public class TaskList {
      */
     public void unmarkTask(int index) {
         tasks.get(index).markAsUndone();
+    }
+
+    /**
+     * Returns a stream of all tasks for functional programming operations.
+     * 
+     * @return a stream of tasks
+     */
+    public Stream<Task> stream() {
+        return tasks.stream();
+    }
+
+    /**
+     * Filters tasks based on a predicate using streams.
+     * 
+     * @param predicate the condition to filter tasks by
+     * @return a list of tasks matching the predicate
+     */
+    public List<Task> filter(java.util.function.Predicate<Task> predicate) {
+        return tasks.stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Counts the number of completed tasks using streams.
+     * 
+     * @return the number of completed tasks
+     */
+    public long countCompleted() {
+        return tasks.stream()
+                .filter(Task::isDone)
+                .count();
+    }
+
+    /**
+     * Counts the number of pending tasks using streams.
+     * 
+     * @return the number of pending tasks
+     */
+    public long countPending() {
+        return tasks.stream()
+                .filter(task -> !task.isDone())
+                .count();
     }
 }

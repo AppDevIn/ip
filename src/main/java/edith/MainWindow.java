@@ -32,12 +32,23 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the E.D.I.T.H. instance
+     * Injects the E.D.I.T.H. instance and displays welcome message
      *
      * @param e The E.D.I.T.H. instance to use for generating responses
      */
     public void setEdith(Edith e) {
         edith = e;
+        showWelcomeMessage();
+    }
+
+    /**
+     * Shows the welcome message when E.D.I.T.H. starts up
+     */
+    private void showWelcomeMessage() {
+        String welcomeMessage = "Hello! I'm E.D.I.T.H.\nWhat can I do for you?";
+        dialogContainer.getChildren().add(
+                DialogBox.getEdithDialog(welcomeMessage, edithImage)
+        );
     }
 
     /**

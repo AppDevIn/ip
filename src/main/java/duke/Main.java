@@ -47,9 +47,6 @@ public class Main extends Application {
         userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
         dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
 
-        DialogBox dialogBox = new DialogBox("Hello!", userImage);
-        dialogContainer.getChildren().addAll(dialogBox);
-
         AnchorPane mainLayout = new AnchorPane();
         mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
 

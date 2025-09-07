@@ -79,6 +79,8 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
+        dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
+
         sendButton.setOnMouseClicked((event) -> {
             handleUserInput();
         });

@@ -1,6 +1,5 @@
 package edith.command;
 
-import java.io.IOException;
 import edith.task.Task;
 import edith.storage.Storage;
 import edith.storage.TaskList;
@@ -26,13 +25,5 @@ public class DeleteCommand extends Command {
                 " Now you have " + tasks.size() + " tasks in the list."
         );
         saveTasksToFile(tasks, ui, storage);
-    }
-    
-    private void saveTasksToFile(TaskList tasks, Ui ui, Storage storage) {
-        try {
-            storage.saveTasksToFile(tasks.getList());
-        } catch (IOException e) {
-            ui.showError("Warning: Could not save tasks to file. " + e.getMessage());
-        }
     }
 }

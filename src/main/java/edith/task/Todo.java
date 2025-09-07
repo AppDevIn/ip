@@ -34,7 +34,7 @@ public class Todo extends Task {
      */
     @Override
     public String toJson() {
-        return "{\"type\":\"T\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\"}";
+        return "{\"type\":\"T\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription()) + "\",\"note\":\"" + escapeJson(getNote()) + "\"}";
     }
 
     /**
@@ -53,6 +53,7 @@ public class Todo extends Task {
             
             boolean isDone = false;
             String description = null;
+            String note = "";
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
@@ -70,6 +71,9 @@ public class Todo extends Task {
                     case "description":
                         description = unescapeJson(value.substring(1, value.length() - 1));
                         break;
+                    case "note":
+                        note = unescapeJson(value.substring(1, value.length() - 1));
+                        break;
                 }
             }
             
@@ -81,6 +85,7 @@ public class Todo extends Task {
             if (isDone) {
                 todo.markAsDone();
             }
+            todo.setNote(note);
             
             return todo;
         } catch (Exception e) {

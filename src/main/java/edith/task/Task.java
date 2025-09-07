@@ -9,6 +9,7 @@ import java.io.IOException;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
+    protected String note;
 
     /**
      * Creates a new task with the specified description.
@@ -21,6 +22,7 @@ public abstract class Task {
         assert !description.trim().isEmpty() : "Task description cannot be empty or whitespace only";
         this.description = description;
         this.isDone = false;
+        this.note = "";
     }
 
     /**
@@ -64,9 +66,40 @@ public abstract class Task {
         return isDone;
     }
 
+    /**
+     * Returns the note associated with this task.
+     *
+     * @return the task note, empty string if no note is set
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * Sets a note for this task.
+     *
+     * @param note the note to associate with this task
+     */
+    public void setNote(String note) {
+        this.note = note == null ? "" : note;
+    }
+
+    /**
+     * Checks if this task has a note.
+     *
+     * @return true if the task has a non-empty note, false otherwise
+     */
+    public boolean hasNote() {
+        return note != null && !note.trim().isEmpty();
+    }
+
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        String baseString = "[" + getStatusIcon() + "] " + description;
+        if (hasNote()) {
+            baseString += " (Note: " + note + ")";
+        }
+        return baseString;
     }
 
     /**

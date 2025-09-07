@@ -8,6 +8,7 @@ import edith.command.ExitCommand;
 import edith.command.FindCommand;
 import edith.command.ListCommand;
 import edith.command.MarkCommand;
+import edith.command.NoteCommand;
 import edith.command.TodoCommand;
 import edith.command.UnmarkCommand;
 import edith.exception.DeadlineException;
@@ -16,6 +17,7 @@ import edith.exception.EventException;
 import edith.exception.FindException;
 import edith.exception.InvalidCommandException;
 import edith.exception.InvalidTaskNumberException;
+import edith.exception.NoteException;
 import edith.exception.TodoException;
 
 /**
@@ -65,6 +67,9 @@ public class Parser {
             case "find":
                 validateFindInput(input);
                 return new FindCommand(input);
+            case "note":
+                validateNoteInput(input, taskCount);
+                return new NoteCommand(input);
             case "bye":
                 return new ExitCommand();
             default:
@@ -169,6 +174,34 @@ public class Parser {
         String trimmed = input.trim().toLowerCase();
         if (trimmed.equals("find") || trimmed.matches("find\\s*")) {
             throw new FindException("OOPS!!! The search keyword cannot be empty.");
+        }
+    }
+
+    /**
+     * Validates the format of a note command input.
+     *
+     * @param input the note command string to validate
+     * @param maxTasks the maximum number of tasks currently in the task list
+     * @throws NoteException if the note format is incorrect or task number is invalid
+     */
+    private static void validateNoteInput(String input, int maxTasks) throws NoteException {
+        String[] parts = input.split(" ", 3);
+        if (parts.length < 3) {
+            throw new NoteException("OOPS!!! Note format should be: note <task number> <note text>");
+        }
+
+        try {
+            int taskNum = Integer.parseInt(parts[1]);
+            if (taskNum < 1 || taskNum > maxTasks) {
+                throw new NoteException("OOPS!!! Task number " + taskNum
+                        + " is out of range. You have " + maxTasks + " tasks.");
+            }
+        } catch (NumberFormatException e) {
+            throw new NoteException("OOPS!!! Task number must be a valid number.");
+        }
+
+        if (parts[2].trim().isEmpty()) {
+            throw new NoteException("OOPS!!! Note cannot be empty.");
         }
     }
 }

@@ -62,7 +62,7 @@ public class Deadline extends Task {
     @Override
     public String toJson() {
         return "{\"type\":\"D\",\"done\":" + isDone() + ",\"description\":\"" + escapeJson(getDescription())
-                + "\",\"by\":\"" + DateTimeParser.formatForJson(by) + "\"}";
+                + "\",\"by\":\"" + DateTimeParser.formatForJson(by) + "\",\"note\":\"" + escapeJson(getNote()) + "\"}";
     }
 
     /**
@@ -82,6 +82,7 @@ public class Deadline extends Task {
             boolean isDone = false;
             String description = null;
             LocalDateTime by = null;
+            String note = "";
             
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
@@ -103,6 +104,9 @@ public class Deadline extends Task {
                         String byString = unescapeJson(value.substring(1, value.length() - 1));
                         by = DateTimeParser.parseFromJson(byString);
                         break;
+                    case "note":
+                        note = unescapeJson(value.substring(1, value.length() - 1));
+                        break;
                 }
             }
             
@@ -114,6 +118,7 @@ public class Deadline extends Task {
             if (isDone) {
                 deadline.markAsDone();
             }
+            deadline.setNote(note);
             
             return deadline;
         } catch (Exception e) {

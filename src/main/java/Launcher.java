@@ -5,6 +5,6 @@ import javafx.application.Application;
  */
 public class Launcher {
     public static void main(String[] args) {
-        Application.launch(duke.Main.class, args);
+        Application.launch(edith.Main.class, args);
     }
 }

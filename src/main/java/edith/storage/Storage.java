@@ -36,6 +36,8 @@ public class Storage {
      * @param fileName the name of the file to use
      */
     public Storage(String dataDir, String fileName) {
+        assert dataDir != null && !dataDir.trim().isEmpty() : "Data directory cannot be null or empty";
+        assert fileName != null && !fileName.trim().isEmpty() : "File name cannot be null or empty";
         this.dataDir = dataDir;
         this.fullPath = dataDir + File.separator + fileName;
         createDataDirectoryIfNotExists();
@@ -56,10 +58,12 @@ public class Storage {
      * @throws IOException if something goes wrong with file writing
      */
     public void saveTasksToFile(ArrayList<Task> tasks) throws IOException {
+        assert tasks != null : "Task list cannot be null";
         createDataDirectoryIfNotExists();
         
         try (FileWriter writer = new FileWriter(fullPath)) {
             for (Task task : tasks) {
+                assert task != null : "Individual task cannot be null when saving";
                 writer.write(task.toJson() + System.lineSeparator());
             }
         }

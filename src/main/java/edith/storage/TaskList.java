@@ -1,5 +1,8 @@
 package edith.storage;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import edith.task.Task;
 
 /**
@@ -32,6 +35,7 @@ public class TaskList {
      * @param task the task to add
      */
     public void add(Task task) {
+        assert task != null : "Cannot add null task to list";
         tasks.add(task);
     }
 
@@ -42,6 +46,7 @@ public class TaskList {
      * @return the task that was removed
      */
     public Task delete(int index) {
+        assert index >= 0 && index < tasks.size() : "Delete index out of bounds: " + index + ", size: " + tasks.size();
         return tasks.remove(index);
     }
 
@@ -52,6 +57,7 @@ public class TaskList {
      * @return the task at that position
      */
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size() : "Get index out of bounds: " + index + ", size: " + tasks.size();
         return tasks.get(index);
     }
 
@@ -79,6 +85,7 @@ public class TaskList {
      * @param index the position of the task to mark (0-based)
      */
     public void markTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Mark index out of bounds: " + index + ", size: " + tasks.size();
         tasks.get(index).markAsDone();
     }
 
@@ -88,6 +95,50 @@ public class TaskList {
      * @param index the position of the task to unmark (0-based)
      */
     public void unmarkTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Unmark index out of bounds: " + index + ", size: " + tasks.size();
         tasks.get(index).markAsUndone();
+    }
+
+    /**
+     * Returns a stream of all tasks for functional programming operations.
+     * 
+     * @return a stream of tasks
+     */
+    public Stream<Task> stream() {
+        return tasks.stream();
+    }
+
+    /**
+     * Filters tasks based on a predicate using streams.
+     * 
+     * @param predicate the condition to filter tasks by
+     * @return a list of tasks matching the predicate
+     */
+    public List<Task> filter(java.util.function.Predicate<Task> predicate) {
+        return tasks.stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Counts the number of completed tasks using streams.
+     * 
+     * @return the number of completed tasks
+     */
+    public long countCompleted() {
+        return tasks.stream()
+                .filter(Task::isDone)
+                .count();
+    }
+
+    /**
+     * Counts the number of pending tasks using streams.
+     * 
+     * @return the number of pending tasks
+     */
+    public long countPending() {
+        return tasks.stream()
+                .filter(task -> !task.isDone())
+                .count();
     }
 }

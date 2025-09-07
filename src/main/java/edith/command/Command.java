@@ -1,12 +1,13 @@
 package edith.command;
 
+import java.io.IOException;
 import edith.storage.Storage;
 import edith.storage.TaskList;
 import edith.ui.Ui;
 import edith.exception.EdithException;
 
 /**
- * Abstract base class for all command types in the Duke application.
+ * Abstract base class for all command types in the Edith application.
  * Implements the Command pattern to encapsulate different user actions.
  */
 public abstract class Command {
@@ -28,5 +29,21 @@ public abstract class Command {
      */
     public boolean isExit() {
         return false;
+    }
+
+    /**
+     * Saves all tasks to file using the provided storage system.
+     * Shows an error message through the UI if saving fails.
+     *
+     * @param tasks the task list to save
+     * @param ui the user interface for displaying error messages
+     * @param storage the storage system to use for saving
+     */
+    protected void saveTasksToFile(TaskList tasks, Ui ui, Storage storage) {
+        try {
+            storage.saveTasksToFile(tasks.getList());
+        } catch (IOException e) {
+            ui.showError("Warning: Could not save tasks to file. " + e.getMessage());
+        }
     }
 }

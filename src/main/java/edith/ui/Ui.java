@@ -1,10 +1,11 @@
 package edith.ui;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 import edith.task.Task;
 
 /**
- * Handles all user interface interactions for the Duke application.
+ * Handles all user interface interactions for the Edith application.
  * Takes care of displaying messages, reading input, and formatting output nicely.
  */
 public class Ui {
@@ -81,9 +82,8 @@ public class Ui {
      */
     public void showTaskList(ArrayList<Task> items) {
         System.out.println(" Here are the tasks in your list:");
-        for (int i = 0; i < items.size(); i++) {
-            System.out.println(" " + (i + 1) + "." + items.get(i));
-        }
+        IntStream.range(0, items.size())
+                .forEach(i -> System.out.println(" " + (i + 1) + "." + items.get(i)));
     }
 
     /**
@@ -98,9 +98,8 @@ public class Ui {
             System.out.println(" No matching tasks found.");
         } else {
             System.out.println(" Here are the matching tasks in your list:");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                System.out.println(" " + originalIndices.get(i) + "." + matchingTasks.get(i));
-            }
+            IntStream.range(0, matchingTasks.size())
+                    .forEach(i -> System.out.println(" " + originalIndices.get(i) + "." + matchingTasks.get(i)));
         }
     }
 

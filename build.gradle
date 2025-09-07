@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id 'checkstyle'
     id 'com.github.spotbugs' version '5.0.14'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -67,3 +68,8 @@ spotbugs {
 }
 
 check.dependsOn checkstyleMain, checkstyleTest
+
+shadowJar {
+    archiveBaseName = "edith"
+    archiveClassifier = null
+}

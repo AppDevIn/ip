@@ -19,7 +19,8 @@ public class EventCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
         String[] fromSplit = input.split(" /from ");
-        String eventDesc = fromSplit[0].substring(5).trim();
+        String[] commandParts = fromSplit[0].split(" ", 2);
+        String eventDesc = commandParts.length > 1 ? commandParts[1] : "";
         String[] toSplit = fromSplit[1].split(" /to ");
         String from = toSplit[0];
         String to = toSplit[1];

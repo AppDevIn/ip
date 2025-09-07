@@ -11,6 +11,7 @@ public abstract class Task {
     protected String description;
     protected boolean isDone;
     protected Duration duration;
+    protected String note;
 
     /**
      * Creates a new task with the specified description.
@@ -24,6 +25,7 @@ public abstract class Task {
         this.description = description;
         this.isDone = false;
         this.duration = null;
+        this.note = "";
     }
 
     /**
@@ -79,13 +81,43 @@ public abstract class Task {
         this.duration = DurationParser.parseDuration(durationStr);
     }
 
+    /**
+     * Returns the note associated with this task.
+     *
+     * @return the task note, empty string if no note is set
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * Sets a note for this task.
+     *
+     * @param note the note to associate with this task
+     */
+    public void setNote(String note) {
+        this.note = note == null ? "" : note;
+    }
+
+    /**
+     * Checks if this task has a note.
+     *
+     * @return true if the task has a non-empty note, false otherwise
+     */
+    public boolean hasNote() {
+        return note != null && !note.trim().isEmpty();
+    }
+
     @Override
     public String toString() {
-        String base = "[" + getStatusIcon() + "] " + description;
-        if (duration != null) {
-            base += " (duration: " + DurationParser.formatDuration(duration) + ")";
+        String baseString = "[" + getStatusIcon() + "] " + description;
+        if (hasNote()) {
+            baseString += " (Note: " + note + ")";
         }
-        return base;
+        if (duration != null) {
+            baseString += " (duration: " + DurationParser.formatDuration(duration) + ")";
+        }
+        return baseString;
     }
 
     /**
@@ -111,29 +143,29 @@ public abstract class Task {
             if (!json.startsWith("{") || !json.endsWith("}")) {
                 throw new IOException("Invalid JSON format: " + jsonLine);
             }
-            
+
             String content = json.substring(1, json.length() - 1);
             String[] pairs = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            
+
             String type = null;
-            
+
             for (String pair : pairs) {
                 String[] keyValue = pair.split(":", 2);
                 if (keyValue.length != 2) {
                     continue;
                 }
-                
+
                 String key = keyValue[0].trim().replace("\"", "");
                 if ("type".equals(key)) {
                     type = keyValue[1].trim().replace("\"", "");
                     break;
                 }
             }
-            
+
             if (type == null) {
                 throw new IOException("Missing type field in JSON: " + jsonLine);
             }
-            
+
             switch (type) {
                 case "T":
                     return Todo.fromJson(jsonLine);

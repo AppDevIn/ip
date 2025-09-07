@@ -14,45 +14,46 @@ import edith.exception.EdithException;
  */
 public class TodoCommand extends Command {
     private String input;
-    
+
     /**
      * Creates a todo command from the user's input.
-     * 
+     *
      * @param input the full command string including "todo" and description
      */
     public TodoCommand(String input) {
         this.input = input;
     }
-    
+
     /**
      * Executes the todo command by creating a new Todo task.
      * Strips off the "todo" part and uses the rest as the description.
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
-        String remainingInput = input.substring(4).trim();
-        
+        String[] parts = input.split(" ", 2);
+        String remainingInput = parts.length > 1 ? parts[1] : "";
+
         String description;
         String duration = null;
-        
+
         if (remainingInput.contains(" /duration ")) {
-            String[] parts = remainingInput.split(" /duration ");
-            description = parts[0].trim();
-            duration = parts[1].trim();
+            String[] durationParts = remainingInput.split(" /duration ");
+            description = durationParts[0].trim();
+            duration = durationParts[1].trim();
         } else {
             description = remainingInput;
         }
-        
+
         Task newTask = new Todo(description);
         if (duration != null && !duration.isEmpty()) {
             try {
                 newTask.setDuration(duration);
             } catch (IllegalArgumentException e) {
-                throw new EdithException("Invalid duration format: " + duration + 
+                throw new EdithException("Invalid duration format: " + duration +
                     ". Use formats like '2h', '30m', '1h 30m', or '90' (minutes)");
             }
         }
-        
+
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());
         saveTasksToFile(tasks, ui, storage);

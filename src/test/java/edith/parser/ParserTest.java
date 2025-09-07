@@ -143,4 +143,69 @@ public class ParserTest {
             Parser.parse("mark 10", 5);
         });
     }
+    
+    @Test
+    public void parse_todoAlias_returnsTodoCommand() throws EdithException {
+        Command command = Parser.parse("t read book", 0);
+        assertTrue(command instanceof TodoCommand);
+    }
+    
+    @Test
+    public void parse_deadlineAlias_returnsDeadlineCommand() throws EdithException {
+        Command command = Parser.parse("d return book /by Sunday", 0);
+        assertTrue(command instanceof DeadlineCommand);
+    }
+    
+    @Test
+    public void parse_eventAlias_returnsEventCommand() throws EdithException {
+        Command command = Parser.parse("e meeting /from 2pm /to 4pm", 0);
+        assertTrue(command instanceof EventCommand);
+    }
+    
+    @Test
+    public void parse_listAlias_returnsListCommand() throws EdithException {
+        Command command = Parser.parse("l", 0);
+        assertTrue(command instanceof ListCommand);
+    }
+    
+    @Test
+    public void parse_markAlias_returnsMarkCommand() throws EdithException {
+        Command command = Parser.parse("m 1", 5);
+        assertTrue(command instanceof MarkCommand);
+    }
+    
+    @Test
+    public void parse_unmarkAlias_returnsUnmarkCommand() throws EdithException {
+        Command command = Parser.parse("u 2", 5);
+        assertTrue(command instanceof UnmarkCommand);
+    }
+    
+    @Test
+    public void parse_deleteAlias_returnsDeleteCommand() throws EdithException {
+        Command command = Parser.parse("del 3", 5);
+        assertTrue(command instanceof DeleteCommand);
+    }
+    
+    @Test
+    public void parse_exitAliases_returnsExitCommand() throws EdithException {
+        Command exitCommand = Parser.parse("exit", 0);
+        Command quitCommand = Parser.parse("quit", 0);
+        Command qCommand = Parser.parse("q", 0);
+        
+        assertTrue(exitCommand instanceof ExitCommand);
+        assertTrue(quitCommand instanceof ExitCommand);
+        assertTrue(qCommand instanceof ExitCommand);
+    }
+    
+    @Test
+    public void parse_fullFormCommands_stillWork() throws EdithException {
+        assertTrue(Parser.parse("todo read", 0) instanceof TodoCommand);
+        assertTrue(Parser.parse("deadline task /by Sunday", 0) instanceof DeadlineCommand);
+        assertTrue(Parser.parse("event meeting /from 2pm /to 4pm", 0) instanceof EventCommand);
+        assertTrue(Parser.parse("list", 0) instanceof ListCommand);
+        assertTrue(Parser.parse("mark 1", 5) instanceof MarkCommand);
+        assertTrue(Parser.parse("unmark 2", 5) instanceof UnmarkCommand);
+        assertTrue(Parser.parse("delete 3", 5) instanceof DeleteCommand);
+        assertTrue(Parser.parse("bye", 0) instanceof ExitCommand);
+    }
 }

@@ -57,6 +57,16 @@ public class Duke {
     }
 
     /**
+     * Generates a response for the user's chat message.
+     *
+     * @param input The user's input message
+     * @return Duke's response to the user input
+     */
+    public String getResponse(String input) {
+        return "Duke heard: " + input;
+    }
+
+    /**
      * Main entry point for the Duke application.
      * 
      * @param args command line arguments (not used)

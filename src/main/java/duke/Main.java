@@ -26,6 +26,7 @@ public class Main extends Application {
 
     private Image userImage;
     private Image dukeImage;
+    private Duke duke = new Duke("duke.txt");
 
     /**
      * Starts the JavaFX application and sets up the GUI components.
@@ -90,11 +91,16 @@ public class Main extends Application {
     }
 
     /**
-     * Creates a dialog box containing user input, and appends it to
-     * the dialog container. Clears the user input after processing.
+     * Creates dialog boxes for both user input and Duke's response,
+     * and appends them to the dialog container. Clears the user input after processing.
      */
     private void handleUserInput() {
-        dialogContainer.getChildren().addAll(new DialogBox(userInput.getText(), userImage));
+        String userText = userInput.getText();
+        String dukeText = duke.getResponse(userInput.getText());
+        dialogContainer.getChildren().addAll(
+                DialogBox.getUserDialog(userText, userImage),
+                DialogBox.getDukeDialog(dukeText, dukeImage)
+        );
         userInput.clear();
     }
 }

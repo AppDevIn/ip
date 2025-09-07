@@ -1,6 +1,9 @@
 package duke;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,5 +36,39 @@ public class DialogBox extends HBox {
         this.setAlignment(Pos.TOP_RIGHT);
 
         this.getChildren().addAll(this.text, displayPicture);
+    }
+
+    /**
+     * Flips the dialog box such that the ImageView is on the left and text on the right.
+     */
+    private void flip() {
+        this.setAlignment(Pos.TOP_LEFT);
+        ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
+        FXCollections.reverse(tmp);
+        this.getChildren().setAll(tmp);
+    }
+
+    /**
+     * Creates a dialog box for user messages.
+     *
+     * @param text The text content to display
+     * @param image The user avatar image
+     * @return A DialogBox configured for user messages
+     */
+    public static DialogBox getUserDialog(String text, Image image) {
+        return new DialogBox(text, image);
+    }
+
+    /**
+     * Creates a dialog box for Duke messages with flipped layout.
+     *
+     * @param text The text content to display
+     * @param image The Duke avatar image
+     * @return A DialogBox configured for Duke messages
+     */
+    public static DialogBox getDukeDialog(String text, Image image) {
+        var db = new DialogBox(text, image);
+        db.flip();
+        return db;
     }
 }

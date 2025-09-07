@@ -34,6 +34,7 @@ public class Parser {
      * @throws EdithException if the input is invalid or command parameters are incorrect
      */
     public static Command parse(String input, int taskCount) throws EdithException {
+        assert taskCount >= 0 : "Task count cannot be negative: " + taskCount;
         if (input == null || input.trim().isEmpty()) {
             throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }

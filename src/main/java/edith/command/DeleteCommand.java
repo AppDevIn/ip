@@ -17,9 +17,18 @@ public class DeleteCommand extends Command {
     
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
+        assert tasks != null : "TaskList cannot be null";
+        assert ui != null : "UI cannot be null";
+        assert storage != null : "Storage cannot be null";
+        
         String[] deleteParts = input.split(" ");
         int deleteNum = Integer.parseInt(deleteParts[1]);
+        int originalSize = tasks.size();
         Task removedTask = tasks.delete(deleteNum - 1);
+        
+        assert removedTask != null : "Removed task should not be null";
+        assert tasks.size() == originalSize - 1 : "Task list size should decrease by 1 after deletion";
+        
         ui.showMessages(
                 " Noted. I've removed this task:",
                 "   " + removedTask,

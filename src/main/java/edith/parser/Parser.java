@@ -40,6 +40,39 @@ public class Parser {
         }
 
         String command = input.toLowerCase().trim().split(" ")[0];
+        
+        // Handle aliases
+        switch (command) {
+            case "t":
+                command = "todo";
+                break;
+            case "d":
+                command = "deadline";
+                break;
+            case "e":
+                command = "event";
+                break;
+            case "l":
+                command = "list";
+                break;
+            case "m":
+                command = "mark";
+                break;
+            case "u":
+                command = "unmark";
+                break;
+            case "del":
+                command = "delete";
+                break;
+            case "f":
+                command = "find";
+                break;
+            case "exit":
+            case "quit":
+            case "q":
+                command = "bye";
+                break;
+        }
 
         switch (command) {
             case "todo":

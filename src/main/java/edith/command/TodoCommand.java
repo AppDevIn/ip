@@ -30,7 +30,8 @@ public class TodoCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
-        String description = input.substring(4).trim();
+        String[] parts = input.split(" ", 2);
+        String description = parts.length > 1 ? parts[1] : "";
         Task newTask = new Todo(description);
         tasks.add(newTask);
         ui.showTaskAdded(newTask, tasks.size());

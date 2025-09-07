@@ -17,6 +17,8 @@ public abstract class Task {
      * @param description the description of the task
      */
     public Task(String description) {
+        assert description != null : "Task description cannot be null";
+        assert !description.trim().isEmpty() : "Task description cannot be empty or whitespace only";
         this.description = description;
         this.isDone = false;
     }
@@ -84,6 +86,7 @@ public abstract class Task {
      * @throws IOException if the JSON is malformed or contains an unknown task type
      */
     public static Task fromJson(String jsonLine) throws IOException {
+        assert jsonLine != null : "JSON line cannot be null";
         try {
             String json = jsonLine.trim();
             if (!json.startsWith("{") || !json.endsWith("}")) {

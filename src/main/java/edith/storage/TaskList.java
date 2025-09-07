@@ -32,6 +32,7 @@ public class TaskList {
      * @param task the task to add
      */
     public void add(Task task) {
+        assert task != null : "Cannot add null task to list";
         tasks.add(task);
     }
 
@@ -42,6 +43,7 @@ public class TaskList {
      * @return the task that was removed
      */
     public Task delete(int index) {
+        assert index >= 0 && index < tasks.size() : "Delete index out of bounds: " + index + ", size: " + tasks.size();
         return tasks.remove(index);
     }
 
@@ -52,6 +54,7 @@ public class TaskList {
      * @return the task at that position
      */
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size() : "Get index out of bounds: " + index + ", size: " + tasks.size();
         return tasks.get(index);
     }
 
@@ -79,6 +82,7 @@ public class TaskList {
      * @param index the position of the task to mark (0-based)
      */
     public void markTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Mark index out of bounds: " + index + ", size: " + tasks.size();
         tasks.get(index).markAsDone();
     }
 
@@ -88,6 +92,7 @@ public class TaskList {
      * @param index the position of the task to unmark (0-based)
      */
     public void unmarkTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Unmark index out of bounds: " + index + ", size: " + tasks.size();
         tasks.get(index).markAsUndone();
     }
 }

@@ -18,7 +18,8 @@ public class DeadlineCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
         String[] deadlineParts = input.split(" /by ");
-        String deadlineDesc = deadlineParts[0].substring(8).trim();
+        String[] commandParts = deadlineParts[0].split(" ", 2);
+        String deadlineDesc = commandParts.length > 1 ? commandParts[1] : "";
         String by = deadlineParts[1];
         try {
             Task deadlineTask = new Deadline(deadlineDesc, by);

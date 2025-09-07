@@ -24,7 +24,8 @@ public class FindCommand extends Command {
      * @param input the full command input from the user (e.g., "find book")
      */
     public FindCommand(String input) {
-        this.keyword = input.substring(4).trim();
+        String[] parts = input.split(" ", 2);
+        this.keyword = parts.length > 1 ? parts[1] : "";
     }
 
     /**

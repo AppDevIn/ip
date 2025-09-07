@@ -18,6 +18,7 @@ public class Edith {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+    private boolean shouldExit = false;
 
     /**
      * Creates a new E.D.I.T.H. instance with the specified file path for task storage.
@@ -57,15 +58,13 @@ public class Edith {
         ui.close();
     }
 
-    private boolean shouldExit = false;
-
     /**
      * Generates a response for the user's chat message using the command processing system.
      * This method processes the input through the parser and executes the appropriate command,
      * returning the response that would be displayed to the user.
      *
      * @param input The user's input message
-     * @return Duke's response to the user input
+     * @return Edith's response to the user input
      */
     public String getResponse(String input) {
         try {

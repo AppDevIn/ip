@@ -1,6 +1,5 @@
 package edith.command;
 
-import java.io.IOException;
 import edith.storage.Storage;
 import edith.storage.TaskList;
 import edith.ui.Ui;
@@ -24,13 +23,5 @@ public class UnmarkCommand extends Command {
                 "   " + tasks.get(unmarkNum - 1)
         );
         saveTasksToFile(tasks, ui, storage);
-    }
-    
-    private void saveTasksToFile(TaskList tasks, Ui ui, Storage storage) {
-        try {
-            storage.saveTasksToFile(tasks.getList());
-        } catch (IOException e) {
-            ui.showError("Warning: Could not save tasks to file. " + e.getMessage());
-        }
     }
 }

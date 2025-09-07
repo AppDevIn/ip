@@ -1,10 +1,21 @@
 package edith.task;
 import java.io.IOException;
 
+/**
+ * Abstract base class representing a task in the E.D.I.T.H. task management system.
+ * Provides common functionality for all types of tasks including completion status,
+ * description management, and JSON serialization support.
+ */
 public abstract class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Creates a new task with the specified description.
+     * The task is initially marked as not done.
+     *
+     * @param description the description of the task
+     */
     public Task(String description) {
         assert description != null : "Task description cannot be null";
         assert !description.trim().isEmpty() : "Task description cannot be empty or whitespace only";
@@ -12,22 +23,43 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    /**
+     * Returns the status icon for this task.
+     *
+     * @return "X" if the task is done, " " (space) if not done
+     */
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
 
+    /**
+     * Marks this task as completed.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
 
+    /**
+     * Marks this task as not completed.
+     */
     public void markAsUndone() {
         this.isDone = false;
     }
 
+    /**
+     * Returns the description of this task.
+     *
+     * @return the task description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Checks if this task is marked as done.
+     *
+     * @return true if the task is completed, false otherwise
+     */
     public boolean isDone() {
         return isDone;
     }
@@ -37,8 +69,22 @@ public abstract class Task {
         return "[" + getStatusIcon() + "] " + description;
     }
 
+    /**
+     * Converts this task to its JSON string representation for storage.
+     * Each subclass must implement this method to serialize its specific attributes.
+     *
+     * @return the JSON string representation of this task
+     */
     public abstract String toJson();
 
+    /**
+     * Creates a Task object from a JSON string representation.
+     * Parses the JSON to determine the task type and delegates to the appropriate subclass.
+     *
+     * @param jsonLine the JSON string representing a task
+     * @return the Task object created from the JSON string
+     * @throws IOException if the JSON is malformed or contains an unknown task type
+     */
     public static Task fromJson(String jsonLine) throws IOException {
         assert jsonLine != null : "JSON line cannot be null";
         try {
@@ -84,6 +130,13 @@ public abstract class Task {
         }
     }
 
+    /**
+     * Escapes special characters in a string for JSON serialization.
+     * Handles backslashes, quotes, and whitespace characters.
+     *
+     * @param str the string to escape
+     * @return the escaped string safe for JSON
+     */
     protected static String escapeJson(String str) {
         return str.replace("\\", "\\\\")
                   .replace("\"", "\\\"")
@@ -92,6 +145,13 @@ public abstract class Task {
                   .replace("\t", "\\t");
     }
 
+    /**
+     * Unescapes JSON-escaped characters back to their original form.
+     * Reverses the escaping done by escapeJson method.
+     *
+     * @param str the JSON-escaped string
+     * @return the unescaped string
+     */
     protected static String unescapeJson(String str) {
         return str.replace("\\\"", "\"")
                   .replace("\\\\", "\\")

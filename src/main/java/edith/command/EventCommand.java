@@ -1,6 +1,5 @@
 package edith.command;
 
-import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import edith.task.Task;
 import edith.task.Event;
@@ -31,14 +30,6 @@ public class EventCommand extends Command {
             saveTasksToFile(tasks, ui, storage);
         } catch (DateTimeParseException e) {
             ui.showError("OOPS!!! " + e.getMessage());
-        }
-    }
-    
-    private void saveTasksToFile(TaskList tasks, Ui ui, Storage storage) {
-        try {
-            storage.saveTasksToFile(tasks.getList());
-        } catch (IOException e) {
-            ui.showError("Warning: Could not save tasks to file. " + e.getMessage());
         }
     }
 }

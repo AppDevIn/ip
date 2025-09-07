@@ -4,7 +4,7 @@ import java.util.Scanner;
 import edith.task.Task;
 
 /**
- * Handles all user interface interactions for the Duke application.
+ * Handles all user interface interactions for the Edith application.
  * Takes care of displaying messages, reading input, and formatting output nicely.
  */
 public class Ui {

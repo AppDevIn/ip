@@ -13,20 +13,22 @@
             fx:controller="edith.MainWindow">
     <children>
         <TextField fx:id="userInput"
-                   layoutY="558.0"
                    onAction="#handleUserInput"
                    prefHeight="41.0"
-                   AnchorPane.bottomAnchor="1.0"
-                   AnchorPane.leftAnchor="0.0"
-                   AnchorPane.rightAnchor="76.0" />
+                   promptText="Type a message..."
+                   style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #E0E0E0; -fx-border-width: 1; -fx-background-color: #FFFFFF; -fx-padding: 8 12 8 12; -fx-font-size: 14px;"
+                   AnchorPane.bottomAnchor="10.0"
+                   AnchorPane.leftAnchor="10.0"
+                   AnchorPane.rightAnchor="86.0" />
         <Button fx:id="sendButton"
                 mnemonicParsing="false"
                 onAction="#handleUserInput"
                 prefHeight="41.0"
                 prefWidth="76.0"
                 text="Send"
-                AnchorPane.bottomAnchor="1.0"
-                AnchorPane.rightAnchor="0.0" />
+                style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: #007AFF; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-width: 0;"
+                AnchorPane.bottomAnchor="10.0"
+                AnchorPane.rightAnchor="10.0" />
         <ScrollPane fx:id="scrollPane"
                     hbarPolicy="NEVER"
                     hvalue="1.0"
@@ -34,7 +36,7 @@
                     AnchorPane.topAnchor="0.0"
                     AnchorPane.leftAnchor="0.0"
                     AnchorPane.rightAnchor="0.0"
-                    AnchorPane.bottomAnchor="42.0">
+                    AnchorPane.bottomAnchor="61.0">
             <content>
                 <VBox fx:id="dialogContainer"
                       spacing="5.0" />

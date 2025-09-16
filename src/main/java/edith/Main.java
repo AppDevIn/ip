@@ -22,6 +22,10 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
+            stage.setTitle("E.D.I.T.H.");
+            stage.setResizable(true);
+            stage.setMinWidth(350);
+            stage.setMinHeight(400);
             fxmlLoader.<MainWindow>getController().setEdith(edith);
             stage.show();
         } catch (IOException e) {

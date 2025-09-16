@@ -29,6 +29,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
     }
 
     /**
@@ -47,7 +48,7 @@ public class MainWindow extends AnchorPane {
     private void showWelcomeMessage() {
         String welcomeMessage = "Hello! I'm E.D.I.T.H.\nWhat can I do for you?";
         dialogContainer.getChildren().add(
-                DialogBox.getEdithDialog(welcomeMessage, edithImage)
+                BotDialogBox.getBotDialog(welcomeMessage, edithImage)
         );
     }
 
@@ -61,8 +62,8 @@ public class MainWindow extends AnchorPane {
         String input = userInput.getText();
         String response = edith.getResponse(input);
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getEdithDialog(response, edithImage)
+                UserDialogBox.getUserDialog(input, userImage),
+                BotDialogBox.getBotDialog(response, edithImage)
         );
         userInput.clear();
 

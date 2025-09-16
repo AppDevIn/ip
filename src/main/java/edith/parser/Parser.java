@@ -37,45 +37,79 @@ public class Parser {
      */
     public static Command parse(String input, int taskCount) throws EdithException {
         assert taskCount >= 0 : "Task count cannot be negative: " + taskCount;
+        validateInputNotEmpty(input);
+
+        String command = extractCommand(input);
+        String normalizedCommand = resolveCommandAlias(command);
+
+        return createCommand(normalizedCommand, input, taskCount);
+    }
+
+    /**
+     * Validates that the input is not null or empty.
+     *
+     * @param input the input to validate
+     * @throws InvalidCommandException if input is null or empty
+     */
+    private static void validateInputNotEmpty(String input) throws InvalidCommandException {
         if (input == null || input.trim().isEmpty()) {
             throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
+    }
 
-        String command = input.toLowerCase().trim().split(" ")[0];
-        
-        // Handle aliases
+    /**
+     * Extracts the command word from the input string.
+     *
+     * @param input the full input string
+     * @return the first word of the input as the command
+     */
+    private static String extractCommand(String input) {
+        return input.toLowerCase().trim().split(" ")[0];
+    }
+
+    /**
+     * Resolves command aliases to their full command names.
+     *
+     * @param command the command to resolve
+     * @return the full command name
+     */
+    private static String resolveCommandAlias(String command) {
         switch (command) {
             case "t":
-                command = "todo";
-                break;
+                return "todo";
             case "d":
-                command = "deadline";
-                break;
+                return "deadline";
             case "e":
-                command = "event";
-                break;
+                return "event";
             case "l":
-                command = "list";
-                break;
+                return "list";
             case "m":
-                command = "mark";
-                break;
+                return "mark";
             case "u":
-                command = "unmark";
-                break;
+                return "unmark";
             case "del":
-                command = "delete";
-                break;
+                return "delete";
             case "f":
-                command = "find";
-                break;
+                return "find";
             case "exit":
             case "quit":
             case "q":
-                command = "bye";
-                break;
+                return "bye";
+            default:
+                return command;
         }
+    }
 
+    /**
+     * Creates the appropriate Command object based on the command type.
+     *
+     * @param command the normalized command name
+     * @param input the original input string
+     * @param taskCount the current number of tasks
+     * @return the corresponding Command object
+     * @throws EdithException if the command is invalid or validation fails
+     */
+    private static Command createCommand(String command, String input, int taskCount) throws EdithException {
         switch (command) {
             case "todo":
                 validateTodoInput(input);

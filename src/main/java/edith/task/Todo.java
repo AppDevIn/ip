@@ -1,6 +1,7 @@
 package edith.task;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * Represents a todo task with a description that can be marked as done or undone.
@@ -53,57 +54,74 @@ public class Todo extends Task {
      */
     public static Todo fromJson(String jsonLine) throws IOException {
         try {
-            String json = jsonLine.trim();
-            String content = json.substring(1, json.length() - 1);
-            String[] pairs = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-            boolean isDone = false;
-            String description = null;
-            Duration duration = null;
-            String note = "";
-
-            for (String pair : pairs) {
-                String[] keyValue = pair.split(":", 2);
-                if (keyValue.length != 2) {
-                    continue;
-                }
-
-                String key = keyValue[0].trim().replace("\"", "");
-                String value = keyValue[1].trim();
-
-                switch (key) {
-                    case "done":
-                        isDone = Boolean.parseBoolean(value);
-                        break;
-                    case "description":
-                        description = unescapeJson(value.substring(1, value.length() - 1));
-                        break;
-                    case "note":
-                        note = unescapeJson(value.substring(1, value.length() - 1));
-                        break;
-                    case "duration":
-                        String durationString = unescapeJson(value.substring(1, value.length() - 1));
-                        duration = DurationParser.parseDurationFromJson(durationString);
-                        break;
-                }
-            }
-
-            if (description == null) {
-                throw new IOException("Missing description field in Todo JSON: " + jsonLine);
-            }
-
-            Todo todo = new Todo(description);
-            if (isDone) {
-                todo.markAsDone();
-            }
-            if (duration != null) {
-                todo.setDuration(duration);
-            }
-            todo.setNote(note);
-
-            return todo;
+            TodoFields fields = parseTodoFields(jsonLine);
+            validateTodoFields(fields, jsonLine);
+            return createTodoFromFields(fields);
         } catch (Exception e) {
             throw new IOException("Failed to parse Todo JSON: " + jsonLine + " - " + e.getMessage());
         }
+    }
+
+    /**
+     * Parses JSON string to extract Todo-specific fields.
+     *
+     * @param jsonLine the JSON string to parse
+     * @return TodoFields object containing parsed values
+     */
+    private static TodoFields parseTodoFields(String jsonLine) {
+        Map<String, String> fieldMap = JsonParser.parseJsonToMap(jsonLine);
+        TodoFields fields = new Todo.TodoFields();
+
+        fields.isDone = JsonParser.extractBooleanValue(fieldMap.get("done"));
+        fields.description = JsonParser.extractStringValue(fieldMap.get("description"));
+        fields.note = JsonParser.extractStringValue(fieldMap.get("note"));
+
+        String durationString = JsonParser.extractStringValue(fieldMap.get("duration"));
+        if (!durationString.isEmpty()) {
+            fields.duration = DurationParser.parseDurationFromJson(durationString);
+        }
+
+        return fields;
+    }
+
+    /**
+     * Validates that all required fields are present for Todo creation.
+     *
+     * @param fields the parsed fields to validate
+     * @param jsonLine the original JSON for error reporting
+     * @throws IOException if required fields are missing
+     */
+    private static void validateTodoFields(TodoFields fields, String jsonLine) throws IOException {
+        if (fields.description == null) {
+            throw new IOException("Missing description field in Todo JSON: " + jsonLine);
+        }
+    }
+
+    /**
+     * Creates and configures a Todo object from parsed fields.
+     *
+     * @param fields the parsed and validated fields
+     * @return configured Todo object
+     */
+    private static Todo createTodoFromFields(TodoFields fields) {
+        Todo todo = new Todo(fields.description);
+        if (fields.isDone) {
+            todo.markAsDone();
+        }
+        if (fields.duration != null) {
+            todo.setDuration(fields.duration);
+        }
+        todo.setNote(fields.note);
+        return todo;
+    }
+
+    /**
+     * Helper class to hold parsed Todo field values.
+     */
+    private static class TodoFields {
+        boolean isDone = false;
+        String description = null;
+        Duration duration = null;
+        String note = "";
     }
 }

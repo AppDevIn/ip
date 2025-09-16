@@ -2,6 +2,7 @@ package edith.task;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 
 /**
  * Represents an event that happens during a specific time period.
@@ -83,66 +84,84 @@ public class Event extends Task {
     /**
      * Creates an Event task from its JSON representation.
      * Parses all the fields including both start and end times.
-     * 
+     *
      * @param jsonLine the JSON string to parse
      * @return a new Event task with the parsed data
      * @throws IOException if the JSON is malformed or missing required fields
      */
     public static Event fromJson(String jsonLine) throws IOException {
         try {
-            String json = jsonLine.trim();
-            String content = json.substring(1, json.length() - 1);
-            String[] pairs = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            
-            boolean isDone = false;
-            String description = null;
-            LocalDateTime from = null;
-            LocalDateTime to = null;
-            String note = "";
-            
-            for (String pair : pairs) {
-                String[] keyValue = pair.split(":", 2);
-                if (keyValue.length != 2) {
-                    continue;
-                }
-                
-                String key = keyValue[0].trim().replace("\"", "");
-                String value = keyValue[1].trim();
-                
-                switch (key) {
-                    case "done":
-                        isDone = Boolean.parseBoolean(value);
-                        break;
-                    case "description":
-                        description = unescapeJson(value.substring(1, value.length() - 1));
-                        break;
-                    case "from":
-                        String fromString = unescapeJson(value.substring(1, value.length() - 1));
-                        from = DateTimeParser.parseFromJson(fromString);
-                        break;
-                    case "to":
-                        String toString = unescapeJson(value.substring(1, value.length() - 1));
-                        to = DateTimeParser.parseFromJson(toString);
-                        break;
-                    case "note":
-                        note = unescapeJson(value.substring(1, value.length() - 1));
-                        break;
-                }
-            }
-            
-            if (description == null || from == null || to == null) {
-                throw new IOException("Missing required fields in Event JSON: " + jsonLine);
-            }
-            
-            Event event = new Event(description, from, to);
-            if (isDone) {
-                event.markAsDone();
-            }
-            event.setNote(note);
-            
-            return event;
+            EventFields fields = parseEventFields(jsonLine);
+            validateEventFields(fields, jsonLine);
+            return createEventFromFields(fields);
         } catch (Exception e) {
             throw new IOException("Failed to parse Event JSON: " + jsonLine + " - " + e.getMessage());
         }
+    }
+
+    /**
+     * Parses JSON string to extract Event-specific fields.
+     *
+     * @param jsonLine the JSON string to parse
+     * @return EventFields object containing parsed values
+     */
+    private static EventFields parseEventFields(String jsonLine) {
+        Map<String, String> fieldMap = JsonParser.parseJsonToMap(jsonLine);
+        EventFields fields = new Event.EventFields();
+
+        fields.isDone = JsonParser.extractBooleanValue(fieldMap.get("done"));
+        fields.description = JsonParser.extractStringValue(fieldMap.get("description"));
+        fields.note = JsonParser.extractStringValue(fieldMap.get("note"));
+
+        String fromString = JsonParser.extractStringValue(fieldMap.get("from"));
+        if (!fromString.isEmpty()) {
+            fields.from = DateTimeParser.parseFromJson(fromString);
+        }
+
+        String toString = JsonParser.extractStringValue(fieldMap.get("to"));
+        if (!toString.isEmpty()) {
+            fields.to = DateTimeParser.parseFromJson(toString);
+        }
+
+        return fields;
+    }
+
+    /**
+     * Validates that all required fields are present for Event creation.
+     *
+     * @param fields the parsed fields to validate
+     * @param jsonLine the original JSON for error reporting
+     * @throws IOException if required fields are missing
+     */
+    private static void validateEventFields(EventFields fields, String jsonLine) throws IOException {
+        if (fields.description == null || fields.from == null || fields.to == null) {
+            throw new IOException("Missing required fields in Event JSON: " + jsonLine);
+        }
+    }
+
+    /**
+     * Creates and configures an Event object from parsed fields.
+     *
+     * @param fields the parsed and validated fields
+     * @return configured Event object
+     */
+    private static Event createEventFromFields(EventFields fields) {
+        Event event = new Event(fields.description, fields.from, fields.to);
+        if (fields.isDone) {
+            event.markAsDone();
+        }
+        event.setNote(fields.note);
+        return event;
+    }
+
+    /**
+     * Helper class to hold parsed Event field values.
+     */
+    private static class EventFields {
+        boolean isDone = false;
+        String description = null;
+        LocalDateTime from = null;
+        LocalDateTime to = null;
+        String note = "";
     }
 }

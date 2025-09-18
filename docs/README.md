@@ -1,6 +1,6 @@
 # E.D.I.T.H. User Guide
 
-<img src="./Ui.png" alt="Product Screenshot" width="400">
+<img src="./Ui.png" alt="Product Screenshot" width="200">
 
 E.D.I.T.H. (Enhanced Digital Interactive Task Helper) is a desktop application for managing your tasks, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, E.D.I.T.H. can get your task management done faster than traditional GUI apps.
 

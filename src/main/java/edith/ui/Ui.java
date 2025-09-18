@@ -31,8 +31,8 @@ public class Ui {
         System.out.println("Hello from\n" + logo);
 
         showMessages(
-                " Hello! I'm E.D.I.T.H.",
-                " What can I do for you?"
+                " E.D.I.T.H. systems online.",
+                " How may I assist you today?"
         );
     }
 
@@ -81,7 +81,7 @@ public class Ui {
      * @param items the list of tasks to display
      */
     public void showTaskList(ArrayList<Task> items) {
-        System.out.println(" Here are the tasks in your list:");
+        System.out.println(" Your current task arsenal:");
         IntStream.range(0, items.size())
                 .forEach(i -> System.out.println(" " + (i + 1) + "." + items.get(i)));
     }
@@ -95,9 +95,9 @@ public class Ui {
      */
     public void showFoundTasks(ArrayList<Task> matchingTasks, ArrayList<Integer> originalIndices) {
         if (matchingTasks.isEmpty()) {
-            System.out.println(" No matching tasks found.");
+            System.out.println(" Scan complete. No matching tasks found.");
         } else {
-            System.out.println(" Here are the matching tasks in your list:");
+            System.out.println(" Scan results - matching tasks located:");
             IntStream.range(0, matchingTasks.size())
                     .forEach(i -> System.out.println(" " + originalIndices.get(i) + "." + matchingTasks.get(i)));
         }
@@ -112,14 +112,14 @@ public class Ui {
      */
     public void showTaskAdded(Task task, int taskCount) {
         showMessages(
-                " Got it. I've added this task:",
+                " Mission accepted. Task added to your arsenal:",
                 "   " + task,
-                " Now you have " + taskCount + " tasks in the list."
+                " Total active missions: " + taskCount
         );
     }
 
     public void showLoadingError() {
-        showMessage(" Could not load saved tasks from file.");
+        showMessage(" Warning: Unable to access saved data files.");
     }
 
     /**
@@ -133,7 +133,7 @@ public class Ui {
     }
 
     public void showGoodbye() {
-        showMessage(" Bye. Hope to see you again soon!");
+        showMessage(" E.D.I.T.H. systems shutting down. Stay safe out there.");
     }
 
     /**

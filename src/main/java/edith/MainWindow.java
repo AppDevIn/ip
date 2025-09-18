@@ -46,7 +46,7 @@ public class MainWindow extends AnchorPane {
      * Shows the welcome message when E.D.I.T.H. starts up
      */
     private void showWelcomeMessage() {
-        String welcomeMessage = "Hello! I'm E.D.I.T.H.\nWhat can I do for you?";
+        String welcomeMessage = "E.D.I.T.H. systems online.\nHow may I assist you today?";
         dialogContainer.getChildren().add(
                 BotDialogBox.getBotDialog(welcomeMessage, edithImage)
         );

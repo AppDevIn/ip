@@ -16,7 +16,7 @@
     <ImageView fx:id="displayPicture" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
     <Label fx:id="dialog" text="Label" wrapText="true" minHeight="-Infinity"
            maxWidth="350.0"
-           style="-fx-background-color: #81d9e3; -fx-background-radius: 12; -fx-padding: 8 12 8 12; -fx-font-size: 13px; -fx-text-fill: #000000; -fx-alignment: center-left;">
+           style="-fx-background-color: #C8102E; -fx-background-radius: 12; -fx-padding: 8 12 8 12; -fx-font-size: 13px; -fx-text-fill: #FFD700; -fx-font-weight: bold; -fx-alignment: center-left;">
       <HBox.margin>
         <Insets left="8.0" />
       </HBox.margin>

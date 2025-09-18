@@ -56,7 +56,7 @@ public class GuiUi extends Ui {
      */
     @Override
     public void showTaskList(ArrayList<Task> items) {
-        responseBuilder.append("Here are the tasks in your list:\n");
+        responseBuilder.append("Your current task arsenal:\n");
         for (int i = 0; i < items.size(); i++) {
             responseBuilder.append((i + 1)).append(".").append(items.get(i)).append("\n");
         }
@@ -71,9 +71,9 @@ public class GuiUi extends Ui {
     @Override
     public void showFoundTasks(ArrayList<Task> matchingTasks, ArrayList<Integer> originalIndices) {
         if (matchingTasks.isEmpty()) {
-            responseBuilder.append("No matching tasks found.\n");
+            responseBuilder.append("Scan complete. No matching tasks found.\n");
         } else {
-            responseBuilder.append("Here are the matching tasks in your list:\n");
+            responseBuilder.append("Scan results - matching tasks located:\n");
             for (int i = 0; i < matchingTasks.size(); i++) {
                 responseBuilder.append(originalIndices.get(i)).append(".").append(matchingTasks.get(i)).append("\n");
             }
@@ -88,9 +88,9 @@ public class GuiUi extends Ui {
      */
     @Override
     public void showTaskAdded(Task task, int taskCount) {
-        responseBuilder.append("Got it. I've added this task:\n");
-        responseBuilder.append("  ").append(task).append("\n");
-        responseBuilder.append("Now you have ").append(taskCount).append(" tasks in the list.\n");
+        responseBuilder.append("Mission accepted. Task added to your arsenal:\n");
+        responseBuilder.append(task).append("\n");
+        responseBuilder.append("Total active missions: ").append(taskCount).append("\n");
     }
 
     /**
@@ -108,7 +108,7 @@ public class GuiUi extends Ui {
      */
     @Override
     public void showLoadingError() {
-        responseBuilder.append("Could not load saved tasks from file.\n");
+        responseBuilder.append("Warning: Unable to access saved data files.\n");
     }
 
     /**
@@ -116,7 +116,7 @@ public class GuiUi extends Ui {
      */
     @Override
     public void showGoodbye() {
-        responseBuilder.append("Bye. Hope to see you again soon!\n");
+        responseBuilder.append("E.D.I.T.H. systems shutting down. Stay safe out there.\n");
     }
 
     @Override

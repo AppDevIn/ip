@@ -42,7 +42,7 @@ public class FindCommandTest {
         System.setOut(originalOut);
         String output = outputStream.toString();
 
-        assertTrue(output.contains("Here are the matching tasks in your list:"));
+        assertTrue(output.contains("Scan results - matching tasks located:"));
         assertTrue(output.contains("1.[T][ ] read book"));
         assertTrue(output.contains("3.[D][ ] return book"));
         assertTrue(output.contains("4.[E][ ] book club meeting"));
@@ -67,7 +67,7 @@ public class FindCommandTest {
         System.setOut(originalOut);
         String output = outputStream.toString();
 
-        assertTrue(output.contains("No matching tasks found."));
+        assertTrue(output.contains("Scan complete. No matching tasks found."));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class FindCommandTest {
         System.setOut(originalOut);
         String output = outputStream.toString();
 
-        assertTrue(output.contains("Here are the matching tasks in your list:"));
+        assertTrue(output.contains("Scan results - matching tasks located:"));
         assertTrue(output.contains("1.[T][ ] Read Book"));
         assertTrue(output.contains("2.[T][ ] BOOK REVIEW"));
     }

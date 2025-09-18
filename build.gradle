@@ -4,6 +4,7 @@ plugins {
     id 'checkstyle'
     id 'com.github.spotbugs' version '5.0.14'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'jacoco'
 }
 
 repositories {
@@ -73,3 +74,17 @@ shadowJar {
     archiveBaseName = "edith"
     archiveClassifier = null
 }
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+test.finalizedBy jacocoTestReport

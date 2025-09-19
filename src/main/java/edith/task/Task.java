@@ -132,9 +132,12 @@ public abstract class Task {
      * Converts a JSON string representation to a Task object.
      * Parses the JSON to determine the task type and delegates to the appropriate subclass.
      *
+     * AI-Assisted: Method refactored Sonnet to break down
+     * a 40+ line method into smaller, focused helper methods for better maintainability.
+     *
      * @param jsonLine the JSON string representing a task
      * @return the Task object created from the JSON string
-     * @throws IOException if the JSON is malformed or contains an unknown task type
+     * @throws IOException if the JSON is malformed or contains an unkno`wn task type
      */
     public static Task convertFromJson(String jsonLine) throws IOException {
         assert jsonLine != null : "JSON line cannot be null";

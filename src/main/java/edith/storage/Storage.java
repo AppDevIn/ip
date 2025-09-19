@@ -46,7 +46,10 @@ public class Storage {
     private void createDataDirectoryIfNotExists() {
         File dataDirFile = new File(dataDir);
         if (!dataDirFile.exists()) {
-            dataDirFile.mkdirs();
+            boolean created = dataDirFile.mkdirs();
+            if (!created) {
+                System.err.println("Warning: Could not create data directory: " + dataDir);
+            }
         }
     }
 

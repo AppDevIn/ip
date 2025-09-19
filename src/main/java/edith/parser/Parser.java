@@ -75,28 +75,28 @@ public class Parser {
      */
     private static String resolveCommandAlias(String command) {
         switch (command) {
-            case "t":
-                return "todo";
-            case "d":
-                return "deadline";
-            case "e":
-                return "event";
-            case "l":
-                return "list";
-            case "m":
-                return "mark";
-            case "u":
-                return "unmark";
-            case "del":
-                return "delete";
-            case "f":
-                return "find";
-            case "exit":
-            case "quit":
-            case "q":
-                return "bye";
-            default:
-                return command;
+        case "t":
+            return "todo";
+        case "d":
+            return "deadline";
+        case "e":
+            return "event";
+        case "l":
+            return "list";
+        case "m":
+            return "mark";
+        case "u":
+            return "unmark";
+        case "del":
+            return "delete";
+        case "f":
+            return "find";
+        case "exit":
+        case "quit":
+        case "q":
+            return "bye";
+        default:
+            return command;
         }
     }
 
@@ -111,36 +111,36 @@ public class Parser {
      */
     private static Command createCommand(String command, String input, int taskCount) throws EdithException {
         switch (command) {
-            case "todo":
-                validateTodoInput(input);
-                return new TodoCommand(input);
-            case "deadline":
-                validateDeadlineInput(input);
-                return new DeadlineCommand(input);
-            case "event":
-                validateEventInput(input);
-                return new EventCommand(input);
-            case "list":
-                return new ListCommand();
-            case "mark":
-                validateTaskNumber(input, taskCount);
-                return new MarkCommand(input);
-            case "unmark":
-                validateTaskNumber(input, taskCount);
-                return new UnmarkCommand(input);
-            case "delete":
-                validateTaskNumber(input, taskCount);
-                return new DeleteCommand(input);
-            case "find":
-                validateFindInput(input);
-                return new FindCommand(input);
-            case "note":
-                validateNoteInput(input, taskCount);
-                return new NoteCommand(input);
-            case "bye":
-                return new ExitCommand();
-            default:
-                throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+        case "todo":
+            validateTodoInput(input);
+            return new TodoCommand(input);
+        case "deadline":
+            validateDeadlineInput(input);
+            return new DeadlineCommand(input);
+        case "event":
+            validateEventInput(input);
+            return new EventCommand(input);
+        case "list":
+            return new ListCommand();
+        case "mark":
+            validateTaskNumber(input, taskCount);
+            return new MarkCommand(input);
+        case "unmark":
+            validateTaskNumber(input, taskCount);
+            return new UnmarkCommand(input);
+        case "delete":
+            validateTaskNumber(input, taskCount);
+            return new DeleteCommand(input);
+        case "find":
+            validateFindInput(input);
+            return new FindCommand(input);
+        case "note":
+            validateNoteInput(input, taskCount);
+            return new NoteCommand(input);
+        case "bye":
+            return new ExitCommand();
+        default:
+            throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
     }
 

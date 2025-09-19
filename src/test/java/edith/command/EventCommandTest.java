@@ -191,4 +191,17 @@ public class EventCommandTest {
         });
         assertTrue(exception.getMessage().contains("Event format should be"));
     }
+
+    @Test
+    public void execute_startTimeAfterEndTime_showsError() throws EdithException {
+        EventCommand command = new EventCommand("event backwards meeting /from 25/12/2024 1800 /to 25/12/2024 1600");
+        command.execute(taskList, ui, storage);
+
+        assertEquals(0, taskList.size());
+
+        System.setOut(originalOut);
+        String output = outputStream.toString();
+        assertTrue(output.contains("OOPS!!!"));
+        assertTrue(output.contains("start time cannot be after end time"));
+    }
 }

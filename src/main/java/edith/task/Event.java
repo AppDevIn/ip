@@ -25,6 +25,10 @@ public class Event extends Task {
         super(description);
         this.from = DateTimeParser.parseDateTime(from);
         this.to = DateTimeParser.parseDateTime(to);
+
+        if (this.from.isAfter(this.to)) {
+            throw new DateTimeParseException("Event start time cannot be after end time", from + " to " + to, 0);
+        }
     }
 
     /**
@@ -38,6 +42,10 @@ public class Event extends Task {
         super(description);
         this.from = from;
         this.to = to;
+
+        if (this.from.isAfter(this.to)) {
+            throw new IllegalArgumentException("Event start time cannot be after end time");
+        }
     }
 
     /**

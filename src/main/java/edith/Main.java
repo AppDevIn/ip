@@ -18,6 +18,12 @@ public class Main extends Application {
 
     private Edith edith = new Edith("edith.txt");
 
+    /**
+     * Starts the JavaFX application and sets up the main window.
+     * Loads the FXML layout, configures the stage, and displays the GUI.
+     *
+     * @param stage the primary stage for this application
+     */
     @Override
     public void start(Stage stage) {
         try {

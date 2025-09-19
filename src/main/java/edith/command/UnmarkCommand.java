@@ -16,7 +16,23 @@ public class UnmarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
         String[] parts = input.split(" ");
-        int unmarkNum = Integer.parseInt(parts[1]);
+
+        if (parts.length < 2) {
+            throw new EdithException("OOPS!!! Please provide a task number to unmark.");
+        }
+
+        int unmarkNum;
+        try {
+            unmarkNum = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new EdithException("OOPS!!! Task number must be a valid number.");
+        }
+
+        if (unmarkNum < 1 || unmarkNum > tasks.size()) {
+            throw new EdithException("OOPS!!! Task number " + unmarkNum + " is out of range. "
+                    + "Valid range: 1 to " + tasks.size());
+        }
+
         tasks.unmarkTask(unmarkNum - 1);
         ui.showMessages(
                 " OK, I've marked this task as not done yet:",

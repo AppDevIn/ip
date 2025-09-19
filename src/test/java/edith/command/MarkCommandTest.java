@@ -91,36 +91,40 @@ public class MarkCommandTest {
     public void execute_invalidTaskNumber_throwsException() {
         MarkCommand command = new MarkCommand("mark 5");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
     public void execute_negativeTaskNumber_throwsException() {
         MarkCommand command = new MarkCommand("mark -1");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
     public void execute_zeroTaskNumber_throwsException() {
         MarkCommand command = new MarkCommand("mark 0");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
     public void execute_nonNumericTaskNumber_throwsException() {
         MarkCommand command = new MarkCommand("mark abc");
 
-        assertThrows(NumberFormatException.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("valid number"));
     }
 
     @Test
@@ -128,9 +132,10 @@ public class MarkCommandTest {
         TaskList emptyList = new TaskList();
         MarkCommand command = new MarkCommand("mark 1");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(emptyList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
@@ -178,9 +183,10 @@ public class MarkCommandTest {
     public void execute_withExtraSpaces_throwsException() {
         MarkCommand command = new MarkCommand("mark  2");
 
-        assertThrows(NumberFormatException.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("valid number"));
     }
 
     @Test
@@ -191,5 +197,35 @@ public class MarkCommandTest {
         command.execute(taskList, ui, storage);
 
         assertEquals(originalSize, taskList.size());
+    }
+
+    @Test
+    public void execute_missingTaskNumber_throwsException() {
+        MarkCommand command = new MarkCommand("mark");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("provide a task number"));
+    }
+
+    @Test
+    public void execute_onlySpacesAfterMark_throwsException() {
+        MarkCommand command = new MarkCommand("mark   ");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("provide a task number"));
+    }
+
+    @Test
+    public void execute_floatingPointNumber_throwsException() {
+        MarkCommand command = new MarkCommand("mark 1.5");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("valid number"));
     }
 }

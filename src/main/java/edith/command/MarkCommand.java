@@ -29,7 +29,23 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
         String[] split = input.split(" ");
-        int taskNum = Integer.parseInt(split[1]);
+
+        if (split.length < 2) {
+            throw new EdithException("OOPS!!! Please provide a task number to mark.");
+        }
+
+        int taskNum;
+        try {
+            taskNum = Integer.parseInt(split[1]);
+        } catch (NumberFormatException e) {
+            throw new EdithException("OOPS!!! Task number must be a valid number.");
+        }
+
+        if (taskNum < 1 || taskNum > tasks.size()) {
+            throw new EdithException("OOPS!!! Task number " + taskNum + " is out of range. "
+                    + "Valid range: 1 to " + tasks.size());
+        }
+
         tasks.markTask(taskNum - 1);
         ui.showMessages(
                 " Nice! I've marked this task as done:",

@@ -81,9 +81,10 @@ public class EventCommandTest {
     public void execute_emptyDescription_throwsException() {
         EventCommand command = new EventCommand("event /from 25/12/2024 1400 /to 25/12/2024 1600");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("description cannot be empty"));
     }
 
     @Test
@@ -129,5 +130,78 @@ public class EventCommandTest {
 
         assertEquals(1, taskList.size());
         assertEquals("café meeting @ shop (€10)", taskList.get(0).getDescription());
+    }
+
+    @Test
+    public void execute_missingFromKeyword_throwsException() {
+        EventCommand command = new EventCommand("event test meeting 25/12/2024 1400 /to 25/12/2024 1600");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Event format should be"));
+    }
+
+    @Test
+    public void execute_missingToKeyword_throwsException() {
+        EventCommand command = new EventCommand("event test meeting /from 25/12/2024 1400 25/12/2024 1600");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Event format should be"));
+    }
+
+    @Test
+    public void execute_emptyStartTime_throwsException() {
+        EventCommand command = new EventCommand("event test meeting /from  /to 25/12/2024 1600");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("times cannot be empty"));
+    }
+
+    @Test
+    public void execute_emptyEndTime_throwsException() {
+        EventCommand command = new EventCommand("event test meeting /from 25/12/2024 1400 /to ");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Event format should be"));
+    }
+
+    @Test
+    public void execute_onlySpacesInDescription_throwsException() {
+        EventCommand command = new EventCommand("event    /from 25/12/2024 1400 /to 25/12/2024 1600");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("description cannot be empty"));
+    }
+
+    @Test
+    public void execute_wrongOrder_throwsException() {
+        EventCommand command = new EventCommand("event test meeting /to 25/12/2024 1600 /from 25/12/2024 1400");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Event format should be"));
+    }
+
+    @Test
+    public void execute_startTimeAfterEndTime_showsError() throws EdithException {
+        EventCommand command = new EventCommand("event backwards meeting /from 25/12/2024 1800 /to 25/12/2024 1600");
+        command.execute(taskList, ui, storage);
+
+        assertEquals(0, taskList.size());
+
+        System.setOut(originalOut);
+        String output = outputStream.toString();
+        assertTrue(output.contains("OOPS!!!"));
+        assertTrue(output.contains("start time cannot be after end time"));
     }
 }

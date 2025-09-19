@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
  */
 public class MainWindow extends AnchorPane {
     private static final int EXIT_DELAY_MS = 1500;
+    private static final int SCROLL_PANE_PADDING = 20;
 
     @FXML
     private ScrollPane scrollPane;
@@ -35,7 +36,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
+        dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(SCROLL_PANE_PADDING));
     }
 
     /**

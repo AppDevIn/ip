@@ -139,45 +139,81 @@ public abstract class Task {
     public static Task convertFromJson(String jsonLine) throws IOException {
         assert jsonLine != null : "JSON line cannot be null";
         try {
-            String json = jsonLine.trim();
-            if (!json.startsWith("{") || !json.endsWith("}")) {
-                throw new IOException("Invalid JSON format: " + jsonLine);
-            }
-
-            String content = json.substring(1, json.length() - 1);
-            String[] pairs = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-
-            String type = null;
-
-            for (String pair : pairs) {
-                String[] keyValue = pair.split(":", 2);
-                if (keyValue.length != 2) {
-                    continue;
-                }
-
-                String key = keyValue[0].trim().replace("\"", "");
-                if ("type".equals(key)) {
-                    type = keyValue[1].trim().replace("\"", "");
-                    break;
-                }
-            }
-
-            if (type == null) {
-                throw new IOException("Missing type field in JSON: " + jsonLine);
-            }
-
-            switch (type) {
-                case "T":
-                    return Todo.convertFromJson(jsonLine);
-                case "D":
-                    return Deadline.convertFromJson(jsonLine);
-                case "E":
-                    return Event.convertFromJson(jsonLine);
-                default:
-                    throw new IOException("Unknown task type: " + type);
-            }
+            validateJsonFormat(jsonLine);
+            String content = extractJsonContent(jsonLine.trim());
+            String type = findTaskType(content);
+            return createTaskFromType(type, jsonLine);
         } catch (Exception e) {
             throw new IOException("Failed to parse JSON: " + jsonLine + " - " + e.getMessage());
+        }
+    }
+
+    /**
+     * Validates that the JSON string has proper format with curly braces.
+     *
+     * @param jsonLine the JSON string to validate
+     * @throws IOException if the JSON format is invalid
+     */
+    private static void validateJsonFormat(String jsonLine) throws IOException {
+        String json = jsonLine.trim();
+        if (!json.startsWith("{") || !json.endsWith("}")) {
+            throw new IOException("Invalid JSON format: " + jsonLine);
+        }
+    }
+
+    /**
+     * Extracts the content between the curly braces from a JSON string.
+     *
+     * @param json the trimmed JSON string
+     * @return the content between the braces
+     */
+    private static String extractJsonContent(String json) {
+        return json.substring(1, json.length() - 1);
+    }
+
+    /**
+     * Finds and returns the task type from the JSON content.
+     *
+     * @param content the JSON content without braces
+     * @return the task type string
+     * @throws IOException if the type field is missing
+     */
+    private static String findTaskType(String content) throws IOException {
+        String[] pairs = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+        for (String pair : pairs) {
+            String[] keyValue = pair.split(":", 2);
+            if (keyValue.length != 2) {
+                continue;
+            }
+
+            String key = keyValue[0].trim().replace("\"", "");
+            if ("type".equals(key)) {
+                return keyValue[1].trim().replace("\"", "");
+            }
+        }
+
+        throw new IOException("Missing type field in JSON");
+    }
+
+    /**
+     * Creates the appropriate Task subclass based on the type string.
+     *
+     * @param type the task type identifier
+     * @param jsonLine the original JSON string for delegation
+     * @return the created Task object
+     * @throws IOException if the task type is unknown
+     */
+    private static Task createTaskFromType(String type, String jsonLine) throws IOException {
+        switch (type) {
+        case "T":
+            return Todo.convertFromJson(jsonLine);
+        case "D":
+            return Deadline.convertFromJson(jsonLine);
+        case "E":
+            return Event.convertFromJson(jsonLine);
+        default:
+            throw new IOException("Unknown task type: " + type);
         }
     }
 

@@ -81,9 +81,10 @@ public class DeadlineCommandTest {
     public void execute_emptyDescription_throwsException() {
         DeadlineCommand command = new DeadlineCommand("deadline /by 2024-12-25");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("description cannot be empty"));
     }
 
     @Test
@@ -138,5 +139,55 @@ public class DeadlineCommandTest {
 
         assertEquals(1, taskList.size());
         assertEquals("leap year task", taskList.get(0).getDescription());
+    }
+
+    @Test
+    public void execute_missingByKeyword_throwsException() {
+        DeadlineCommand command = new DeadlineCommand("deadline test task 2024-12-25");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Deadline format should be"));
+    }
+
+    @Test
+    public void execute_emptyDeadlineTime_throwsException() {
+        DeadlineCommand command = new DeadlineCommand("deadline test task /by ");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Deadline format should be"));
+    }
+
+    @Test
+    public void execute_onlySpacesInDescription_throwsException() {
+        DeadlineCommand command = new DeadlineCommand("deadline    /by 2024-12-25");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("description cannot be empty"));
+    }
+
+    @Test
+    public void execute_onlySpacesInTime_throwsException() {
+        DeadlineCommand command = new DeadlineCommand("deadline test task /by   ");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("time cannot be empty"));
+    }
+
+    @Test
+    public void execute_multipleByKeywords_throwsException() {
+        DeadlineCommand command = new DeadlineCommand("deadline test task /by 2024-12-25 /by 2024-12-26");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("Deadline format should be"));
     }
 }

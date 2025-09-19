@@ -19,11 +19,28 @@ public class EventCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws EdithException {
         String[] fromSplit = input.split(" /from ");
+        if (fromSplit.length != 2) {
+            throw new EdithException("OOPS!!! Event format should be: event <description> /from <start> /to <end>");
+        }
+
         String[] commandParts = fromSplit[0].split(" ", 2);
-        String eventDesc = commandParts.length > 1 ? commandParts[1] : "";
+        String eventDesc = commandParts.length > 1 ? commandParts[1].trim() : "";
+
+        if (eventDesc.isEmpty()) {
+            throw new EdithException("OOPS!!! Event description cannot be empty.");
+        }
+
         String[] toSplit = fromSplit[1].split(" /to ");
-        String from = toSplit[0];
-        String to = toSplit[1];
+        if (toSplit.length != 2) {
+            throw new EdithException("OOPS!!! Event format should be: event <description> /from <start> /to <end>");
+        }
+
+        String from = toSplit[0].trim();
+        String to = toSplit[1].trim();
+
+        if (from.isEmpty() || to.isEmpty()) {
+            throw new EdithException("OOPS!!! Event times cannot be empty.");
+        }
         try {
             Task eventTask = new Event(eventDesc, from, to);
             tasks.add(eventTask);

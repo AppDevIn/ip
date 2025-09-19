@@ -96,9 +96,24 @@ public class Edith {
     /**
      * Main entry point for the E.D.I.T.H. application.
      *
-     * @param args command line arguments (not used)
+     * @param args command line arguments - optional file path for data storage
      */
     public static void main(String[] args) {
-        new Edith("edith.txt").run();
+        String filePath = "edith.txt";
+
+        if (args.length > 0) {
+            filePath = args[0];
+            if (filePath.trim().isEmpty()) {
+                System.err.println("Error: File path cannot be empty");
+                System.exit(1);
+            }
+        }
+
+        try {
+            new Edith(filePath).run();
+        } catch (Exception e) {
+            System.err.println("Fatal error: " + e.getMessage());
+            System.exit(1);
+        }
     }
 }

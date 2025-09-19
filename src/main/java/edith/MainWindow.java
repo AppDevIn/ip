@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
  * Controller for the main GUI.
  */
 public class MainWindow extends AnchorPane {
+    private static final int EXIT_DELAY_MS = 1500;
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -70,7 +72,7 @@ public class MainWindow extends AnchorPane {
         if (edith.shouldExit()) {
             javafx.application.Platform.runLater(() -> {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(EXIT_DELAY_MS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

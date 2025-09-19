@@ -117,27 +117,30 @@ public class DeleteCommandTest {
     public void execute_invalidTaskNumber_throwsException() {
         DeleteCommand command = new DeleteCommand("delete 5");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
     public void execute_negativeTaskNumber_throwsException() {
         DeleteCommand command = new DeleteCommand("delete -1");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
     public void execute_zeroTaskNumber_throwsException() {
         DeleteCommand command = new DeleteCommand("delete 0");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
@@ -145,18 +148,20 @@ public class DeleteCommandTest {
         TaskList emptyList = new TaskList();
         DeleteCommand command = new DeleteCommand("delete 1");
 
-        assertThrows(AssertionError.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(emptyList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("out of range"));
     }
 
     @Test
     public void execute_nonNumericTaskNumber_throwsException() {
         DeleteCommand command = new DeleteCommand("delete abc");
 
-        assertThrows(NumberFormatException.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("valid number"));
     }
 
     @Test
@@ -226,9 +231,10 @@ public class DeleteCommandTest {
     public void execute_withExtraSpaces_throwsException() {
         DeleteCommand command = new DeleteCommand("delete  2");
 
-        assertThrows(NumberFormatException.class, () -> {
+        EdithException exception = assertThrows(EdithException.class, () -> {
             command.execute(taskList, ui, storage);
         });
+        assertTrue(exception.getMessage().contains("valid number"));
     }
 
     @Test
@@ -268,5 +274,35 @@ public class DeleteCommandTest {
 
         assertTrue(output.contains("Warning: Could not save tasks to file"));
         assertEquals(2, taskList.size());
+    }
+
+    @Test
+    public void execute_missingTaskNumber_throwsException() {
+        DeleteCommand command = new DeleteCommand("delete");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("provide a task number"));
+    }
+
+    @Test
+    public void execute_onlySpacesAfterDelete_throwsException() {
+        DeleteCommand command = new DeleteCommand("delete   ");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("provide a task number"));
+    }
+
+    @Test
+    public void execute_floatingPointNumber_throwsException() {
+        DeleteCommand command = new DeleteCommand("delete 1.5");
+
+        EdithException exception = assertThrows(EdithException.class, () -> {
+            command.execute(taskList, ui, storage);
+        });
+        assertTrue(exception.getMessage().contains("valid number"));
     }
 }

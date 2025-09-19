@@ -40,7 +40,22 @@ public class DeleteCommand extends Command {
         assert storage != null : "Storage cannot be null";
         
         String[] deleteParts = input.split(" ");
-        int deleteNum = Integer.parseInt(deleteParts[1]);
+
+        if (deleteParts.length < 2) {
+            throw new EdithException("OOPS!!! Please provide a task number to delete.");
+        }
+
+        int deleteNum;
+        try {
+            deleteNum = Integer.parseInt(deleteParts[1]);
+        } catch (NumberFormatException e) {
+            throw new EdithException("OOPS!!! Task number must be a valid number.");
+        }
+
+        if (deleteNum < 1 || deleteNum > tasks.size()) {
+            throw new EdithException("OOPS!!! Task number " + deleteNum + " is out of range. "
+                    + "Valid range: 1 to " + tasks.size());
+        }
         int originalSize = tasks.size();
         Task removedTask = tasks.delete(deleteNum - 1);
         

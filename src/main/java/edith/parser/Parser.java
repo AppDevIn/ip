@@ -75,28 +75,28 @@ public class Parser {
      */
     private static String resolveCommandAlias(String command) {
         switch (command) {
-            case "t":
-                return "todo";
-            case "d":
-                return "deadline";
-            case "e":
-                return "event";
-            case "l":
-                return "list";
-            case "m":
-                return "mark";
-            case "u":
-                return "unmark";
-            case "del":
-                return "delete";
-            case "f":
-                return "find";
-            case "exit":
-            case "quit":
-            case "q":
-                return "bye";
-            default:
-                return command;
+        case "t":
+            return "todo";
+        case "d":
+            return "deadline";
+        case "e":
+            return "event";
+        case "l":
+            return "list";
+        case "m":
+            return "mark";
+        case "u":
+            return "unmark";
+        case "del":
+            return "delete";
+        case "f":
+            return "find";
+        case "exit":
+        case "quit":
+        case "q":
+            return "bye";
+        default:
+            return command;
         }
     }
 
@@ -111,36 +111,36 @@ public class Parser {
      */
     private static Command createCommand(String command, String input, int taskCount) throws EdithException {
         switch (command) {
-            case "todo":
-                validateTodoInput(input);
-                return new TodoCommand(input);
-            case "deadline":
-                validateDeadlineInput(input);
-                return new DeadlineCommand(input);
-            case "event":
-                validateEventInput(input);
-                return new EventCommand(input);
-            case "list":
-                return new ListCommand();
-            case "mark":
-                validateTaskNumber(input, taskCount);
-                return new MarkCommand(input);
-            case "unmark":
-                validateTaskNumber(input, taskCount);
-                return new UnmarkCommand(input);
-            case "delete":
-                validateTaskNumber(input, taskCount);
-                return new DeleteCommand(input);
-            case "find":
-                validateFindInput(input);
-                return new FindCommand(input);
-            case "note":
-                validateNoteInput(input, taskCount);
-                return new NoteCommand(input);
-            case "bye":
-                return new ExitCommand();
-            default:
-                throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+        case "todo":
+            validateTodoInput(input);
+            return new TodoCommand(input);
+        case "deadline":
+            validateDeadlineInput(input);
+            return new DeadlineCommand(input);
+        case "event":
+            validateEventInput(input);
+            return new EventCommand(input);
+        case "list":
+            return new ListCommand();
+        case "mark":
+            validateTaskNumber(input, taskCount);
+            return new MarkCommand(input);
+        case "unmark":
+            validateTaskNumber(input, taskCount);
+            return new UnmarkCommand(input);
+        case "delete":
+            validateTaskNumber(input, taskCount);
+            return new DeleteCommand(input);
+        case "find":
+            validateFindInput(input);
+            return new FindCommand(input);
+        case "note":
+            validateNoteInput(input, taskCount);
+            return new NoteCommand(input);
+        case "bye":
+            return new ExitCommand();
+        default:
+            throw new InvalidCommandException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
     }
 
@@ -152,8 +152,8 @@ public class Parser {
      * @throws TodoException if the todo description is empty or contains only whitespace
      */
     private static void validateTodoInput(String input) throws TodoException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("todo") || trimmed.matches("todo\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("todo") || trimmedCommand.matches("todo\\s*")) {
             throw new TodoException("OOPS!!! The description of a todo cannot be empty.");
         }
     }
@@ -165,8 +165,8 @@ public class Parser {
      * @throws DeadlineException if the deadline format is incorrect or missing required parts
      */
     private static void validateDeadlineInput(String input) throws DeadlineException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("deadline") || trimmed.matches("deadline\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("deadline") || trimmedCommand.matches("deadline\\s*")) {
             throw new DeadlineException("OOPS!!! The description of a deadline cannot be empty.");
         }
 
@@ -187,8 +187,8 @@ public class Parser {
      * @throws EventException if the event format is incorrect or missing required time parameters
      */
     private static void validateEventInput(String input) throws EventException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("event") || trimmed.matches("event\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("event") || trimmedCommand.matches("event\\s*")) {
             throw new EventException("OOPS!!! The description of an event cannot be empty.");
         }
 
@@ -238,8 +238,8 @@ public class Parser {
      * @throws FindException if the search keyword is empty or contains only whitespace
      */
     private static void validateFindInput(String input) throws FindException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("find") || trimmed.matches("find\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("find") || trimmedCommand.matches("find\\s*")) {
             throw new FindException("OOPS!!! The search keyword cannot be empty.");
         }
     }

@@ -37,27 +37,27 @@ public class Ui {
     }
 
     /**
-     * Reads whatever the user types in as their next command.
+     * Reads whatever the user types in from the terminal as their next command.
      *
      * @return the user's input as a string
      */
-    public String readCommand() {
+    public String readCommandFromTerminal() {
         return scanner.nextLine();
     }
 
-    public void showLine() {
+    public void displayLineSeparator() {
         System.out.println("____________________________________________________________");
     }
 
     /**
-     * Shows a single message wrapped in those nice divider lines.
+     * Displays a single message wrapped in those nice divider lines.
      *
      * @param message the message to display to the user
      */
-    public void showMessage(String message) {
-        showLine();
+    public void displayMessageOutput(String message) {
+        displayLineSeparator();
         System.out.println(message);
-        showLine();
+        displayLineSeparator();
     }
 
     /**
@@ -67,11 +67,11 @@ public class Ui {
      * @param messages variable number of messages to display
      */
     public void showMessages(String... messages) {
-        showLine();
+        displayLineSeparator();
         for (String message : messages) {
             System.out.println(message);
         }
-        showLine();
+        displayLineSeparator();
     }
 
     /**
@@ -119,7 +119,7 @@ public class Ui {
     }
 
     public void showLoadingError() {
-        showMessage(" Warning: Unable to access saved data files.");
+        displayMessageOutput(" Warning: Unable to access saved data files.");
     }
 
     /**
@@ -129,11 +129,11 @@ public class Ui {
      * @param errorMessage the error message to show the user
      */
     public void showError(String errorMessage) {
-        showMessage(" " + errorMessage);
+        displayMessageOutput(" " + errorMessage);
     }
 
     public void showGoodbye() {
-        showMessage(" E.D.I.T.H. systems shutting down. Stay safe out there.");
+        displayMessageOutput(" E.D.I.T.H. systems shutting down. Stay safe out there.");
     }
 
     /**

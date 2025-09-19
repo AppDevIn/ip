@@ -74,7 +74,7 @@ public class Deadline extends Task {
      * @return a new Deadline task with the parsed data
      * @throws IOException if the JSON is malformed or missing required fields
      */
-    public static Deadline fromJson(String jsonLine) throws IOException {
+    public static Deadline convertFromJson(String jsonLine) throws IOException {
         try {
             DeadlineFields fields = parseDeadlineFields(jsonLine);
             validateDeadlineFields(fields, jsonLine);

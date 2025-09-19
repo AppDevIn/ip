@@ -4,8 +4,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class DateTimeParser {
-    private static final DateTimeFormatter INPUT_FORMAT_1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter INPUT_FORMAT_2 = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter DATE_ONLY_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a");
 
     public static LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
@@ -17,7 +17,7 @@ public class DateTimeParser {
             }
             
             if (trimmed.matches("\\d{1,2}/\\d{1,2}/\\d{4} \\d{4}")) {
-                return LocalDateTime.parse(trimmed, INPUT_FORMAT_2);
+                return LocalDateTime.parse(trimmed, DATE_TIME_FORMAT);
             }
             
             throw new DateTimeParseException("Unsupported date format: " + dateTimeString, dateTimeString, 0);

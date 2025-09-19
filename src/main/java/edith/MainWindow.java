@@ -12,6 +12,9 @@ import javafx.scene.layout.VBox;
  * Controller for the main GUI.
  */
 public class MainWindow extends AnchorPane {
+    private static final int EXIT_DELAY_MS = 1500;
+    private static final int SCROLL_PANE_PADDING = 20;
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -26,10 +29,14 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image edithImage = new Image(this.getClass().getResourceAsStream("/images/DaEdith.png"));
 
+    /**
+     * Initializes the MainWindow by setting up scroll pane binding.
+     * This method is automatically called by the FXML loader after loading the layout.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
+        dialogContainer.prefWidthProperty().bind(scrollPane.widthProperty().subtract(SCROLL_PANE_PADDING));
     }
 
     /**
@@ -70,7 +77,7 @@ public class MainWindow extends AnchorPane {
         if (edith.shouldExit()) {
             javafx.application.Platform.runLater(() -> {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(EXIT_DELAY_MS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

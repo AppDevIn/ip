@@ -46,7 +46,7 @@ public class Edith {
         boolean isExit = false;
         while (!isExit) {
             try {
-                String fullCommand = ui.readCommand();
+                String fullCommand = ui.readCommandFromTerminal();
                 Command c = Parser.parse(fullCommand, tasks.size());
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();

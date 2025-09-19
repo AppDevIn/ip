@@ -89,7 +89,7 @@ public class Event extends Task {
      * @return a new Event task with the parsed data
      * @throws IOException if the JSON is malformed or missing required fields
      */
-    public static Event fromJson(String jsonLine) throws IOException {
+    public static Event convertFromJson(String jsonLine) throws IOException {
         try {
             EventFields fields = parseEventFields(jsonLine);
             validateEventFields(fields, jsonLine);

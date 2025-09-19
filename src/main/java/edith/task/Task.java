@@ -129,14 +129,14 @@ public abstract class Task {
     public abstract String toJson();
 
     /**
-     * Creates a Task object from a JSON string representation.
+     * Converts a JSON string representation to a Task object.
      * Parses the JSON to determine the task type and delegates to the appropriate subclass.
      *
      * @param jsonLine the JSON string representing a task
      * @return the Task object created from the JSON string
      * @throws IOException if the JSON is malformed or contains an unknown task type
      */
-    public static Task fromJson(String jsonLine) throws IOException {
+    public static Task convertFromJson(String jsonLine) throws IOException {
         assert jsonLine != null : "JSON line cannot be null";
         try {
             String json = jsonLine.trim();
@@ -168,11 +168,11 @@ public abstract class Task {
 
             switch (type) {
                 case "T":
-                    return Todo.fromJson(jsonLine);
+                    return Todo.convertFromJson(jsonLine);
                 case "D":
-                    return Deadline.fromJson(jsonLine);
+                    return Deadline.convertFromJson(jsonLine);
                 case "E":
-                    return Event.fromJson(jsonLine);
+                    return Event.convertFromJson(jsonLine);
                 default:
                     throw new IOException("Unknown task type: " + type);
             }

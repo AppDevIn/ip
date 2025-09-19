@@ -68,7 +68,7 @@ public class FixedDurationTaskTest {
     public void todo_fromJson_withDuration_restoresProperly() throws IOException {
         String json = "{\"type\":\"T\",\"done\":false,\"description\":\"test task\",\"duration\":\"120\"}";
         
-        Todo todo = Todo.fromJson(json);
+        Todo todo = Todo.convertFromJson(json);
         
         assertEquals("test task", todo.getDescription());
         assertEquals(120, todo.getDuration().toMinutes());
@@ -79,7 +79,7 @@ public class FixedDurationTaskTest {
     public void todo_fromJson_withoutDuration_worksNormally() throws IOException {
         String json = "{\"type\":\"T\",\"done\":false,\"description\":\"test task\"}";
         
-        Todo todo = Todo.fromJson(json);
+        Todo todo = Todo.convertFromJson(json);
         
         assertEquals("test task", todo.getDescription());
         assertNull(todo.getDuration());
@@ -90,7 +90,7 @@ public class FixedDurationTaskTest {
     public void todo_fromJson_withDurationAndDone_restoresBoth() throws IOException {
         String json = "{\"type\":\"T\",\"done\":true,\"description\":\"completed task\",\"duration\":\"60\"}";
         
-        Todo todo = Todo.fromJson(json);
+        Todo todo = Todo.convertFromJson(json);
         
         assertEquals("completed task", todo.getDescription());
         assertEquals(60, todo.getDuration().toMinutes());
@@ -104,7 +104,7 @@ public class FixedDurationTaskTest {
         original.markAsDone();
         
         String json = original.toJson();
-        Todo restored = Todo.fromJson(json);
+        Todo restored = Todo.convertFromJson(json);
         
         assertEquals(original.getDescription(), restored.getDescription());
         assertEquals(original.getDuration(), restored.getDuration());

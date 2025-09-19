@@ -52,7 +52,7 @@ public class Todo extends Task {
      * @return a Todo object created from the JSON data
      * @throws IOException if the JSON format is invalid or parsing fails
      */
-    public static Todo fromJson(String jsonLine) throws IOException {
+    public static Todo convertFromJson(String jsonLine) throws IOException {
         try {
             TodoFields fields = parseTodoFields(jsonLine);
             validateTodoFields(fields, jsonLine);

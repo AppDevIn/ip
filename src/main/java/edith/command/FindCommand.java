@@ -56,8 +56,8 @@ public class FindCommand extends Command {
                 .map(i -> i + 1)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        ui.showLine();
+        ui.displayLineSeparator();
         ui.showFoundTasks(matchingTasks, originalIndices);
-        ui.showLine();
+        ui.displayLineSeparator();
     }
 }

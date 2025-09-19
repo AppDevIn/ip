@@ -33,7 +33,7 @@ public class GuiUi extends Ui {
      * @param message the message to add to the response
      */
     @Override
-    public void showMessage(String message) {
+    public void displayMessageOutput(String message) {
         responseBuilder.append(message).append("\n");
     }
 
@@ -120,7 +120,7 @@ public class GuiUi extends Ui {
     }
 
     @Override
-    public String readCommand() {
+    public String readCommandFromTerminal() {
         return "";
     }
 

@@ -152,8 +152,8 @@ public class Parser {
      * @throws TodoException if the todo description is empty or contains only whitespace
      */
     private static void validateTodoInput(String input) throws TodoException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("todo") || trimmed.matches("todo\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("todo") || trimmedCommand.matches("todo\\s*")) {
             throw new TodoException("OOPS!!! The description of a todo cannot be empty.");
         }
     }
@@ -165,8 +165,8 @@ public class Parser {
      * @throws DeadlineException if the deadline format is incorrect or missing required parts
      */
     private static void validateDeadlineInput(String input) throws DeadlineException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("deadline") || trimmed.matches("deadline\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("deadline") || trimmedCommand.matches("deadline\\s*")) {
             throw new DeadlineException("OOPS!!! The description of a deadline cannot be empty.");
         }
 
@@ -187,8 +187,8 @@ public class Parser {
      * @throws EventException if the event format is incorrect or missing required time parameters
      */
     private static void validateEventInput(String input) throws EventException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("event") || trimmed.matches("event\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("event") || trimmedCommand.matches("event\\s*")) {
             throw new EventException("OOPS!!! The description of an event cannot be empty.");
         }
 
@@ -238,8 +238,8 @@ public class Parser {
      * @throws FindException if the search keyword is empty or contains only whitespace
      */
     private static void validateFindInput(String input) throws FindException {
-        String trimmed = input.trim().toLowerCase();
-        if (trimmed.equals("find") || trimmed.matches("find\\s*")) {
+        String trimmedCommand = input.trim().toLowerCase();
+        if (trimmedCommand.equals("find") || trimmedCommand.matches("find\\s*")) {
             throw new FindException("OOPS!!! The search keyword cannot be empty.");
         }
     }

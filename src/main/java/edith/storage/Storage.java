@@ -14,7 +14,7 @@ import edith.task.Task;
  * Creates the data directory automatically and deals with all the file I/O messiness.
  */
 public class Storage {
-    private static final String DEFAULT_DATA_DIR = "data";
+    private static final String DEFAULT_DATA_DIRECTORY = "data";
     private static final String DEFAULT_FILE_NAME = "edith.txt";
     
     private final String dataDir;
@@ -25,7 +25,7 @@ public class Storage {
      * Uses 'data/edith.txt' as the default location.
      */
     public Storage() {
-        this(DEFAULT_DATA_DIR, DEFAULT_FILE_NAME);
+        this(DEFAULT_DATA_DIRECTORY, DEFAULT_FILE_NAME);
     }
 
     /**
@@ -90,7 +90,7 @@ public class Storage {
                     .filter(line -> !line.trim().isEmpty())
                     .map(line -> {
                         try {
-                            return Task.fromJson(line);
+                            return Task.convertFromJson(line);
                         } catch (IOException e) {
                             return null;
                         }

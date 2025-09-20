@@ -38,7 +38,8 @@ public class Main extends Application {
             fxmlLoader.<MainWindow>getController().setEdith(edith);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load FXML layout: " + e.getMessage());
+            System.exit(1);
         }
     }
 }

@@ -118,7 +118,7 @@ public class DateTimeParserTest {
 
     @Test
     public void parseDateTime_nullInput_throwsException() {
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(DateTimeParseException.class, () -> {
             DateTimeParser.parseDateTime(null);
         });
     }

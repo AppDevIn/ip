@@ -5,12 +5,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DurationParser {
-    
+
+    private static final int MINUTES_PER_HOUR = 60;
+
     private static final Pattern DURATION_PATTERN = Pattern.compile(
-        "(?:(\\d+)\\s*h(?:ours?)?)?\\s*(?:(\\d+)\\s*m(?:inutes?)?)?", 
+        "(?:(\\d+)\\s*h(?:ours?)?)?\\s*(?:(\\d+)\\s*m(?:inutes?)?)?",
         Pattern.CASE_INSENSITIVE
     );
-    
+
     private static final Pattern SIMPLE_DURATION_PATTERN = Pattern.compile(
         "(\\d+(?:\\.\\d+)?)\\s*(h|hour|hours|m|min|mins|minute|minutes)",
         Pattern.CASE_INSENSITIVE
@@ -29,7 +31,7 @@ public class DurationParser {
             String unit = simpleMatcher.group(2);
             
             if (unit.startsWith("h")) {
-                return Duration.ofMinutes((long) (value * 60));
+                return Duration.ofMinutes((long) (value * MINUTES_PER_HOUR));
             } else {
                 return Duration.ofMinutes((long) value);
             }

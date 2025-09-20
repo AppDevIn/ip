@@ -15,9 +15,9 @@ import edith.exception.EdithException;
  */
 public class Edith {
 
-    private Storage storage;
+    private final Storage storage;
     private TaskList tasks;
-    private Ui ui;
+    private final Ui ui;
     private boolean shouldExit = false;
 
     /**

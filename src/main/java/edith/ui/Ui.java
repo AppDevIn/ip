@@ -9,6 +9,7 @@ import edith.task.Task;
  * Takes care of displaying messages, reading input, and formatting output nicely.
  */
 public class Ui {
+    private static final String LINE_SEPARATOR = "____________________________________________________________";
     private Scanner scanner;
 
     /**
@@ -46,7 +47,7 @@ public class Ui {
     }
 
     public void displayLineSeparator() {
-        System.out.println("____________________________________________________________");
+        System.out.println(LINE_SEPARATOR);
     }
 
     /**

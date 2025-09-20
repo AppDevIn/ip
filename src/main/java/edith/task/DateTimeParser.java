@@ -9,6 +9,9 @@ public class DateTimeParser {
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a");
 
     public static LocalDateTime parseDateTime(String dateTimeString) throws DateTimeParseException {
+        if (dateTimeString == null) {
+            throw new DateTimeParseException("Date string cannot be null", "", 0);
+        }
         String trimmed = dateTimeString.trim();
         
         try {
